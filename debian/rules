@@ -51,8 +51,8 @@ clean: cleaner unpatch
 cleaner:
 	dh_testdir
 	dh_testroot
-	[ ! -f Makefile ] || $(MAKE) distclean
 	rm -f build-stamp configure-stamp   
+	[ ! -f Makefile ] || $(MAKE) distclean
 	dh_clean
 
 install: build
@@ -60,8 +60,8 @@ install: build
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
+
 	$(MAKE) install DESTDIR=$(CURDIR)/debian/tclcurl
-	dh_movefiles
 
 # Build architecture-independent files here.
 binary-indep: build install
@@ -87,4 +87,4 @@ binary-arch: build install
 
 binary: binary-indep binary-arch
 
-.PHONY: binary binary-arch binary-indep build clean configure install
+.PHONY: build clean binary-arch binary-indep binary install configure
