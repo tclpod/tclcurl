@@ -10,6 +10,7 @@ tclcurl (7.17.1-1) unstable; urgency=low
   * Added LDFLAGS += -Wl,-z,defs -Wl,--as-needed so that I can shorten
     the correct-linking patch to kerberos related libs.
   * Switched to use tcltk-depends to depend on the right Tcl version.
+  * Added Vcs-Svn field to debian/control.
   
  -- Sven Hoexter <sven@timegate.de>  Sat, 15 Dec 2007 15:21:37 +0100
 

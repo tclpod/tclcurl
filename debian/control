@@ -5,6 +5,7 @@ Maintainer: Sven Hoexter <sven@timegate.de>
 Build-Depends: debhelper (>> 5), tcl-dev, libcurl4-gnutls-dev (>= 7.17.1), quilt, bc
 Homepage: http://personal1.iddeo.es/andresgarci/tclcurl/english/index.html
 Standards-Version: 3.7.3
+Vcs-Svn: svn://www.stormbind.net/debian-pkgs-sven/tclcurl/trunk
 
 Package: tclcurl
 Architecture: any
