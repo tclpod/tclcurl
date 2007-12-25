@@ -18,7 +18,7 @@ CONFIGURE_OPTIONS += \
 	--prefix=/usr \
 	--mandir=/usr/share/man \
 	--infodir=/usr/share/info \
-	--enable-threads
+	--enable-threads \
 
 
 LDFLAGS += -Wl,-z,defs -Wl,--as-needed
@@ -36,8 +36,8 @@ configure: patch configure-stamp
 configure-stamp:
 	dh_testdir
 
-        CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" \
-        ./configure $(CONFIGURE_OPTIONS)
+	CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" \
+	./configure $(CONFIGURE_OPTIONS)
 
 	touch configure-stamp
 
@@ -86,5 +86,4 @@ binary-arch: build install
 	dh_builddeb
 
 binary: binary-indep binary-arch
-
-.PHONY: build clean binary-arch binary-indep binary install configure
+.PHONY: build clean binary-indep binary-arch binary install configure
