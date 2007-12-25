@@ -23,9 +23,9 @@ CONFIGURE_OPTIONS += \
 
 LDFLAGS += -Wl,-z,defs -Wl,--as-needed
 
-CFLAGS += -Wall -g
+CFLAGS = -Wall -g
 
-ifeq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
         CFLAGS += -O0
 else
         CFLAGS += -O2
