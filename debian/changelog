@@ -12,8 +12,9 @@ tclcurl (7.17.1-1) unstable; urgency=low
   * Switched to use tcltk-depends to depend on the right Tcl version.
   * Added Vcs-Svn field to debian/control.
   * Reworked debian/rules to make it a bit clearer what happens.
+  * Adopt the new Tcl/Tk policy and move the lib into /usr/lib/tcltk.
   
- -- Sven Hoexter <sven@timegate.de>  Tue, 25 Dec 2007 19:56:19 +0100
+ -- Sven Hoexter <sven@timegate.de>  Tue, 25 Dec 2007 21:49:02 +0100
 
 tclcurl (7.16.2-1) unstable; urgency=low
 

@@ -62,6 +62,9 @@ install: build
 	dh_installdirs
 
 	$(MAKE) install DESTDIR=$(CURDIR)/debian/tclcurl
+	mkdir $(CURDIR)/debian/tclcurl/usr/lib/tcltk
+	mv $(CURDIR)/debian/tclcurl/usr/lib/TclCurl* \
+		$(CURDIR)/debian/tclcurl/usr/lib/tcltk
 	rm -rf \
 		$(CURDIR)/debian/tclcurl/usr/share/man/mann \
 		$(CURDIR)/debian/tclcurl/usr/bin \
