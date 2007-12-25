@@ -1,0 +1,44 @@
+Index: TclCurl-7.17.1/configure
+===================================================================
+--- TclCurl-7.17.1.orig/configure	2007-12-15 15:14:05.000000000 +0100
++++ TclCurl-7.17.1/configure	2007-12-15 15:15:34.000000000 +0100
+@@ -6494,7 +6494,16 @@
+ echo "${ECHO_T}yes" >&6
+ 
+ 
+-    vars="`$curlpath/curl-config --libs`"
++# We need to modify this original line to strip a few things
++# See: http://lists.debian.org/debian-devel-announce/2006/09/msg00018.html
++
++    vars="`$curlpath/curl-config --libs|sed \
++    -e 's/\-lkrb5\>//g' \
++    -e 's/\-lgssapi_krb5//g' \
++    -e 's/\-lk5crypto//g' \
++    -e 's/\-lkrb5support//g' \
++ `"
++
+     for i in $vars; do
+ 	if test "${TEA_PLATFORM}" = "windows" -a "$GCC" = "yes" ; then
+ 	    # Convert foo.lib to -lfoo for GCC.  No-op if not *.lib
+Index: TclCurl-7.17.1/configure.in
+===================================================================
+--- TclCurl-7.17.1.orig/configure.in	2007-12-15 15:14:07.000000000 +0100
++++ TclCurl-7.17.1/configure.in	2007-12-15 15:15:55.000000000 +0100
+@@ -127,7 +127,16 @@
+ fi
+ AC_MSG_RESULT(yes)
+ 
+-TEA_ADD_LIBS([`$curlpath/curl-config --libs`])
++# We need to modify this original line to strip a few things
++# See: http://lists.debian.org/debian-devel-announce/2006/09/msg00018.html
++
++TEA_ADD_LIBS([`$curlpath/curl-config --libs|sed \
++    -e 's/\-lkrb5\>//g' \
++    -e 's/\-lgssapi_krb5//g' \
++    -e 's/\-lk5crypto//g' \
++    -e 's/\-lkrb5support//g' \
++ `])
++
+ 
+ #--------------------------------------------------------------------
+ # A few miscellaneous platform-specific items:

@@ -1,0 +1,228 @@
+tclcurl (7.17.1-1) unstable; urgency=low
+
+  * New upstream release to support curl 7.17.1 features.
+  * Following lintian advice for debian-rules-ignores-make-clean-error.
+  * Moved the Homepage from the Description into the new Homepage field.
+  * Removed man-quoting patch; got applied upstream.
+  * Standards-Version: 3.7.3 - no changes required.
+  * Build depend on tcl-dev instead of tcl8.4-dev.
+  * Refreshed man-section and correct-linking patch.
+  * Added LDFLAGS += -Wl,-z,defs -Wl,--as-needed so that I can shorten
+    the correct-linking patch to kerberos related libs.
+  * Switched to use tcltk-depends to depend on the right Tcl version.
+  
+ -- Sven Hoexter <sven@timegate.de>  Sat, 15 Dec 2007 15:21:37 +0100
+
+tclcurl (7.16.2-1) unstable; urgency=low
+
+  * New upstream release
+  * Changed version to the one used upstream to follow libcurl version
+  * Updated libcurl build-dep to the new libcurl version (closes: #423448)
+  * Added bc to build-dep
+  * Reorganisation of packaging; I'm now using quilt which should ease the
+    patch management a lot. I've only adopted those patches I really know
+    about why they're needed so it's completly possible that I've lost
+    something.
+
+ -- Sven Hoexter <sven@timegate.de>  Tue, 22 May 2007 17:39:30 +0200
+
+tclcurl (0.15.3-3) unstable; urgency=low
+
+  * Applied a patch to generic/tclcurl.c (provided by Andres Garcia)
+    to solve some pointer warnings from gcc 4.1 which may lead to
+    wrong code.
+    See also: http://people.debian.org/~tbm/logs/pointer/
+
+ -- Sven Hoexter <sven@timegate.de>  Sat, 21 Oct 2006 12:06:30 +0200
+
+tclcurl (0.15.3-2) unstable; urgency=low
+
+  * Change to compat level 5
+  * Change to Standards-Version 3.7.2 - nothing todo
+  * Corrected some quoting in tclcurl.n
+  * Added a crude hack to configure.in to strip some libs from the
+    linking process to lower the auto generated depends for this package
+
+ -- Sven Hoexter <sven@timegate.de>  Tue, 26 Sep 2006 11:33:44 +0200
+
+tclcurl (0.15.3-1) unstable; urgency=low
+
+  * New upstream release
+  * Upstream added .txt to the Changes and Changelog file
+  * TclCurl no longer supports Gopher
+
+ -- Sven Hoexter <sven@timegate.de>  Tue, 18 Apr 2006 08:55:57 +0200
+
+tclcurl (0.15.1-1) unstable; urgency=low
+
+  * New upstream release
+  * Change from DH_COMPAT 3 to DH_COMPAT 4 and moved it from rules
+    into the compat file.
+  * Incorporating Luk Claes NMU
+  * remerged the modifications to configure and Makefile.in partly by hand
+  * I'm going to adopt this package (closes: #228231)
+
+
+ -- Sven Hoexter <sven@timegate.de>  Wed, 29 Mar 2006 15:34:56 +0200
+
+tclcurl (0.14.1-1.1) unstable; urgency=high
+
+  * Non-maintainer upload.
+  * Fix syntax error in tcl.m4 (Closes: #356871).
+
+ -- Luk Claes <luk@debian.org>  Mon, 27 Mar 2006 19:28:19 +0200
+
+tclcurl (0.14.1-1) unstable; urgency=low
+
+  * New upstream release.
+  * Switched to libcurl3-gnutls-dev build dependency.
+
+ -- Domenico Andreoli <cavok@debian.org>  Tue, 18 Oct 2005 14:35:11 +0200
+
+tclcurl (0.14.0-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Domenico Andreoli <cavok@debian.org>  Mon, 20 Jun 2005 12:42:47 +0200
+
+tclcurl (0.13.2-1) unstable; urgency=low
+
+  * New upstream release.
+  * Updated build dependency on libcurl3-dev >= 7.13.2.
+
+ -- Domenico Andreoli <cavok@debian.org>  Fri, 22 Apr 2005 11:57:50 +0200
+
+tclcurl (0.12.2-3) unstable; urgency=low
+
+  * tclcurl package now suggests libcurl3-dev instead of libcurl2-dev.
+
+ -- Domenico Andreoli <cavok@debian.org>  Sat, 11 Dec 2004 22:18:26 +0100
+
+tclcurl (0.12.2-2) unstable; urgency=low
+
+  * Updated build dependency on libcurl3-dev >= 7.12.2.
+
+ -- Domenico Andreoli <cavok@debian.org>  Wed, 10 Nov 2004 00:34:22 +0100
+
+tclcurl (0.12.2-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Domenico Andreoli <cavok@debian.org>  Sat,  6 Nov 2004 13:07:36 +0100
+
+tclcurl (0.12.0-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Domenico Andreoli <cavok@debian.org>  Sun, 18 Jul 2004 23:50:54 +0200
+
+tclcurl (0.11.0-1) unstable; urgency=low
+
+  * New upstream release (closes: #227799).
+  * I am again the maintainer but only until somebody adopts it.
+  * Updated build depends on newer versions of curl and Tcl 8.4.
+  * Updated standards version to 3.6.1.
+  * Enabled multi-threads support.
+
+ -- Domenico Andreoli <cavok@debian.org>  Sun, 15 Feb 2004 16:37:31 +0100
+
+tclcurl (0.10.5-2) unstable; urgency=low
+
+  * Updated standards version to new debian-policy version.
+  * Updated build depends to new debhelper version, and new libcurl2-dev
+    version.
+
+ -- Deedra Waters <dmwaters@linuxpowered.com>  Sun, 10 Aug 2003 15:27:36 -0400
+
+tclcurl (0.10.5-1) unstable; urgency=low
+
+  * New upstream release.
+  * Fixed a typo in the long description.
+
+ -- Deedra Waters <dmwaters@linuxpowered.com>  Tue, 10 Jun 2003 10:26:22 -0400
+
+tclcurl (0.10.4-2) unstable; urgency=low
+
+  * Adopted this package from it's maintainer (closes: #188361).
+  * Fixed some things in the rules file to make it clean up nicer.
+  * Updated the standards to the current version.
+
+ -- Deedra Waters <dmwaters@linuxpowered.com>  Sun,  4 May 2003 17:02:36 -0400
+
+tclcurl (0.10.4-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Domenico Andreoli <cavok@debian.org>  Sat,  5 Apr 2003 00:53:30 +0200
+
+tclcurl (0.10.3-1) unstable; urgency=low
+
+  * New upstream release.
+  * Updated build dependencies in order to use new libcurl2-dev package.
+  * It now suggests libcurl2-dev for documentation.
+  * Improved long description.
+
+ -- Domenico Andreoli <cavok@debian.org>  Thu,  6 Feb 2003 02:51:01 +0100
+
+tclcurl (0.10.1-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Domenico Andreoli <cavok@debian.org>  Tue, 15 Oct 2002 23:57:54 +0200
+
+tclcurl (0.9.8-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Domenico Andreoli <cavok@debian.org>  Fri, 28 Jun 2002 01:06:46 +0200
+
+tclcurl (0.9.6-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Domenico Andreoli <cavok@debian.org>  Mon,  6 May 2002 14:42:22 +0200
+
+tclcurl (0.9.5-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Domenico Andreoli <cavok@debian.org>  Wed,  3 Apr 2002 13:16:13 +0200
+
+tclcurl (0.9.3-2) unstable; urgency=low
+
+  * Removed a useless (for Debian systems) check in Makefile.in. BTW
+    this bypasses a segmentation fault during the build process on arm.
+
+ -- Domenico Andreoli <cavok@debian.org>  Mon, 18 Feb 2002 16:10:40 +0100
+
+tclcurl (0.9.3-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Domenico Andreoli <cavok@debian.org>  Tue, 29 Jan 2002 18:08:06 +0100
+
+tclcurl (0.9.2-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Domenico Andreoli <cavok@debian.org>  Tue, 11 Dec 2001 19:22:21 +0100
+
+tclcurl (0.9-2) unstable; urgency=low
+
+  * Build-Depends now contains "libcurl-dev (>= 7.9.1-3) | libcurl-ssl-dev
+    (>= 7.9.1-3)" instead of only "libcurl-dev (>= 7.9-1) | libcurl-ssl-dev
+    (>= 7.9-1)" (closes: #120293).
+
+ -- Domenico Andreoli <cavok@debian.org>  Thu, 22 Nov 2001 15:47:03 +0100
+
+tclcurl (0.9-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Domenico Andreoli <cavok@debian.org>  Fri,  9 Nov 2001 16:27:42 +0100
+
+tclcurl (0.8-1) unstable; urgency=low
+
+  * Initial release (closes: #113467).
+
+ -- Domenico Andreoli <cavok@debian.org>  Wed, 26 Sep 2001 00:51:25 +0200
