@@ -63,8 +63,9 @@ install: build
 
 	$(MAKE) install DESTDIR=$(CURDIR)/debian/tclcurl
 	rm -rf \
-		$(CURDIR)/debian/mysqltcl/usr/bin \
-		$(CURDIR)/debian/mysqltcl/usr/include
+		$(CURDIR)/debian/tclcurl/usr/share/man/mann \
+		$(CURDIR)/debian/tclcurl/usr/bin \
+		$(CURDIR)/debian/tclcurl/usr/include
 
 
 # Build architecture-independent files here.
