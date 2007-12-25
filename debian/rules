@@ -62,6 +62,10 @@ install: build
 	dh_installdirs
 
 	$(MAKE) install DESTDIR=$(CURDIR)/debian/tclcurl
+	rm -rf \
+		$(CURDIR)/debian/mysqltcl/usr/bin \
+		$(CURDIR)/debian/mysqltcl/usr/include
+
 
 # Build architecture-independent files here.
 binary-indep: build install
