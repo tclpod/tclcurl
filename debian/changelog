@@ -14,6 +14,7 @@ tclcurl (7.17.1-1) unstable; urgency=low
   * Reworked debian/rules to make it a bit clearer what happens.
   * Adopt the new Tcl/Tk policy and move the lib into /usr/lib/tcltk.
   * Added patch reformat-tclcurl3 to prevent confusion of man.
+  * Updated the copyright file and formated it to make lintian happy.
 
  -- Sven Hoexter <sven@timegate.de>  Wed, 13 Feb 2008 21:21:39 +0100
 

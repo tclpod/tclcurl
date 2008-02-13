@@ -1,12 +1,16 @@
 This package was debianized by Domenico Andreoli <cavok@debian.org> on
 Wed, 26 Sep 2001 00:51:25 +0200.
 
+It is currently maintained by Sven Hoexter <sven@timegate.de>.
+
 It was downloaded from
   http://personal1.iddeo.es/andresgarci/tclcurl/english/index.html
 
 Upstream Author: Andres Garcia <fandom@retemail.es>
 
 Copyright:
+
+	Copyright (c) 2001-2007 Andres Garcia
 
 	This software is copyrighted by Andres Garcia Garcia and other parties
 	parties.  The following terms apply to all files associated with the
