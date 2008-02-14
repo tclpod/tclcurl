@@ -84,6 +84,7 @@ binary-arch: build install
 	dh_installdocs Changes.txt
 	dh_installman
 	dh_installchangelogs ChangeLog.txt
+	dh_installexamples tests
 	dh_link
 	dh_strip
 	dh_compress
