@@ -1,78 +1,78 @@
-Index: TclCurl-7.17.1/doc/tclcurl.html
+Index: TclCurl-7.19.0/doc/tclcurl.html
 ===================================================================
---- TclCurl-7.17.1.orig/doc/tclcurl.html	2007-12-15 15:01:43.000000000 +0100
-+++ TclCurl-7.17.1/doc/tclcurl.html	2007-12-15 15:01:51.000000000 +0100
+--- TclCurl-7.19.0.orig/doc/tclcurl.html	2008-09-11 20:37:08.000000000 +0200
++++ TclCurl-7.19.0/doc/tclcurl.html	2008-09-11 20:37:41.000000000 +0200
 @@ -1,7 +1,7 @@
  <HTML><HEAD><TITLE>Manpage of TclCurl</TITLE>
  </HEAD><BODY>
  <H1>TclCurl</H1>
--Section: TclCurl Easy Interface (n)<BR>Updated: 1 November 2007<BR><HR>
-+Section: TclCurl Easy Interface (3)<BR>Updated: 1 November 2007<BR><HR>
- 
+-Section: Easy inteface (n)<BR>Updated: 8 September 2008<BR>
++Section: Easy inteface (3)<BR>Updated: 8 September 2008<BR>
  <A NAME="lbAB">&nbsp;</A>
+ <hr>
  <H2>NAME</H2>
-Index: TclCurl-7.17.1/doc/tclcurl.n
+Index: TclCurl-7.19.0/doc/tclcurl.n
 ===================================================================
---- TclCurl-7.17.1.orig/doc/tclcurl.n	2007-12-15 15:01:46.000000000 +0100
-+++ TclCurl-7.17.1/doc/tclcurl.n	2007-12-15 15:01:59.000000000 +0100
+--- TclCurl-7.19.0.orig/doc/tclcurl.n	2008-09-11 20:38:36.000000000 +0200
++++ TclCurl-7.19.0/doc/tclcurl.n	2008-09-11 20:38:41.000000000 +0200
 @@ -1,7 +1,7 @@
  .\" You can view this file with:
  .\" nroff -man [file]
  .\" Adapted from libcurl docs by fandom@telefonica.net
--.TH TclCurl n "1 November 2007" "TclCurl 7.17.1" "TclCurl Easy Interface"
-+.TH TclCurl 3 "1 November 2007" "TclCurl 7.17.1" "TclCurl Easy Interface"
+-.TH TclCurl n "8 September 2008" "TclCurl 7.19.0 "TclCurl Easy Interface"
++.TH TclCurl 3 "8 September 2008" "TclCurl 7.19.0 "TclCurl Easy Interface"
  .SH NAME
  TclCurl: - get  a  URL with FTP, FTPS, HTTP, HTTPS, SCP, SFTP, TFTP, TELNET, DICT, FILE or LDAP syntax.
  .SH SYNOPSIS
-Index: TclCurl-7.17.1/doc/tclcurl_multi.html
+Index: TclCurl-7.19.0/doc/tclcurl_multi.html
 ===================================================================
---- TclCurl-7.17.1.orig/doc/tclcurl_multi.html	2007-12-15 15:01:43.000000000 +0100
-+++ TclCurl-7.17.1/doc/tclcurl_multi.html	2007-12-15 15:01:51.000000000 +0100
+--- TclCurl-7.19.0.orig/doc/tclcurl_multi.html	2008-09-11 20:37:56.000000000 +0200
++++ TclCurl-7.19.0/doc/tclcurl_multi.html	2008-09-11 20:38:02.000000000 +0200
 @@ -1,7 +1,7 @@
  <HTML><HEAD><TITLE>Manpage of TclCurl</TITLE>
  </HEAD><BODY>
  <H1>TclCurl</H1>
--Section: TclCurl Multi Interface (n)<BR>Updated: 1 November 2007<BR><HR>
-+Section: TclCurl Multi Interface (3)<BR>Updated: 1 November 2007<BR><HR>
+-Section: TclCurl Multi Interface (n)<BR>Updated: 8 September 2008<BR><HR>
++Section: TclCurl Multi Interface (3)<BR>Updated: 8 September 2008<BR><HR>
  
  <A NAME="lbAB">&nbsp;</A>
  <H2>NAME</H2>
-Index: TclCurl-7.17.1/doc/tclcurl_multi.n
+Index: TclCurl-7.19.0/doc/tclcurl_multi.n
 ===================================================================
---- TclCurl-7.17.1.orig/doc/tclcurl_multi.n	2007-12-15 15:01:46.000000000 +0100
-+++ TclCurl-7.17.1/doc/tclcurl_multi.n	2007-12-15 15:01:59.000000000 +0100
+--- TclCurl-7.19.0.orig/doc/tclcurl_multi.n	2008-09-11 20:38:22.000000000 +0200
++++ TclCurl-7.19.0/doc/tclcurl_multi.n	2008-09-11 20:38:28.000000000 +0200
 @@ -1,7 +1,7 @@
  .\" You can view this file with:
  .\" nroff -man [file]
  .\" Adapted from libcurl docs by fandom@telefonica.net
--.TH TclCurl n "19 July 2007" "TclCurl 7.16.4" "TclCurl Multi Interface"
-+.TH TclCurl 3 "19 July 2007" "TclCurl 7.16.4" "TclCurl Multi Interface"
+-.TH TclCurl n "8 September 2008" "TclCurl 7.19.0" "TclCurl Multi Interface"
++.TH TclCurl 3 "8 September 2008" "TclCurl 7.19.0" "TclCurl Multi Interface"
  .SH NAME
  TclCurl: - get  a  URL with FTP, FTPS, HTTP, HTTPS, SCP, SFTP, TFTP, TELNET, DICT, FILE or LDAP syntax.
  .SH SYNOPSIS
-Index: TclCurl-7.17.1/doc/tclcurl_share.html
+Index: TclCurl-7.19.0/doc/tclcurl_share.html
 ===================================================================
---- TclCurl-7.17.1.orig/doc/tclcurl_share.html	2007-12-15 15:01:43.000000000 +0100
-+++ TclCurl-7.17.1/doc/tclcurl_share.html	2007-12-15 15:01:51.000000000 +0100
+--- TclCurl-7.19.0.orig/doc/tclcurl_share.html	2008-09-11 20:38:49.000000000 +0200
++++ TclCurl-7.19.0/doc/tclcurl_share.html	2008-09-11 20:38:54.000000000 +0200
 @@ -1,7 +1,7 @@
  <HTML><HEAD><TITLE>Manpage of TclCurl</TITLE>
  </HEAD><BODY>
  <H1>TclCurl</H1>
--Section: TclCurl share data api (n)<BR>Updated: 1 November 2007<BR><HR>
-+Section: TclCurl share data api (3)<BR>Updated: 1 November 2007<BR><HR>
+-Section: TclCurl share data api (n)<BR>Updated: 8 September 2008<BR><HR>
++Section: TclCurl share data api (3)<BR>Updated: 8 September 2008<BR><HR>
  
  <A NAME="lbAB">&nbsp;</A>
  <H2>NAME</H2>
-Index: TclCurl-7.17.1/doc/tclcurl_share.n
+Index: TclCurl-7.19.0/doc/tclcurl_share.n
 ===================================================================
---- TclCurl-7.17.1.orig/doc/tclcurl_share.n	2007-12-15 15:01:46.000000000 +0100
-+++ TclCurl-7.17.1/doc/tclcurl_share.n	2007-12-15 15:01:59.000000000 +0100
+--- TclCurl-7.19.0.orig/doc/tclcurl_share.n	2008-09-11 20:39:01.000000000 +0200
++++ TclCurl-7.19.0/doc/tclcurl_share.n	2008-09-11 20:39:05.000000000 +0200
 @@ -1,7 +1,7 @@
  .\" You can view this file with:
  .\" nroff -man [file]
  .\" Adapted from libcurl docs by fandom@telefonica.net
--.TH TclCurl n "1 November 2007" "TclCurl 7.17.1" "TclCurl share data api"
-+.TH TclCurl 3 "1 November 2007" "TclCurl 7.17.1" "TclCurl share data api"
+-.TH TclCurl n "8 September 2008" "TclCurl 7.19.0" "TclCurl share data api"
++.TH TclCurl 3 "8 September 2008" "TclCurl 7.19.0" "TclCurl share data api"
  .SH NAME
  TclCurl: - get  a  URL with FTP, FTPS, HTTP, HTTPS, SCP, SFTP, TFTP, TELNET, DICT, FILE or LDAP syntax.
  .SH SYNOPSIS

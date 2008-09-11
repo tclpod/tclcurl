@@ -1,8 +1,8 @@
-Index: TclCurl-7.17.1/doc/tclcurl.n
+Index: TclCurl-7.19.0/doc/tclcurl.n
 ===================================================================
---- TclCurl-7.17.1.orig/doc/tclcurl.n	2008-02-13 21:31:28.000000000 +0100
-+++ TclCurl-7.17.1/doc/tclcurl.n	2008-02-13 21:41:42.000000000 +0100
-@@ -676,10 +676,10 @@
+--- TclCurl-7.19.0.orig/doc/tclcurl.n	2008-09-11 09:31:45.000000000 +0200
++++ TclCurl-7.19.0/doc/tclcurl.n	2008-09-11 09:32:01.000000000 +0200
+@@ -687,10 +687,10 @@
  
  .TP
  .B -cookie
@@ -17,7 +17,7 @@ Index: TclCurl-7.17.1/doc/tclcurl.n
  
  If  you  need  to  set mulitple cookies, you need to set them all using
  a single option and thus you need to concatenate them all in one single string.
-@@ -1339,7 +1339,7 @@
+@@ -1384,7 +1384,7 @@
  used as operators. 
  
  For OpenSSL and GnuTLS valid examples of cipher lists include 'RC4-SHA', 'SHA1+DES',
@@ -26,7 +26,7 @@ Index: TclCurl-7.17.1/doc/tclcurl.n
  
  You will find more details about cipher lists on this URL:
      http://www.openssl.org/docs/apps/ciphers.html
-@@ -1485,7 +1485,7 @@
+@@ -1530,7 +1530,7 @@
  you want parallel transfers, you must use several curl handles.
  .TP
  .B RETURN VALUE
