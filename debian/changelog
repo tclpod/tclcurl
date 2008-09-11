@@ -2,6 +2,7 @@ tclcurl (7.19.0-1) UNRELEASED; urgency=low
 
   * New upstream release
     + Refresh all patches.
+    + Build-Depend at least on libcurl4 (>= 7.19.0).
 
  -- Sven Hoexter <sven@timegate.de>  Thu, 11 Sep 2008 20:42:36 +0200
 
