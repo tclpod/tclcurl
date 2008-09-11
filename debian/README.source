@@ -1,0 +1,72 @@
+==================================
+Quilt using package in your hands
+==================================
+
+This package makes use of a debian/patches/ directory maintained
+with quilt. The integration of the actual patches in the build process
+is done with the inclusion of /usr/share/quilt/quilt.make in debian/rules.
+
+
+Modify this package
+===================
+
+You can still modify this package (e.g. for NMUs) through editing
+the source but be aware that this might collide with patches integrated
+in the patch system.
+
+Since one of the patches strips linking flags from the configure and
+configure.in files re-libtoolizing etc. pp. will result in build problems.
+
+
+Modify this package with quilt
+==============================
+
+This is a small example to get you started with quilt on this package
+and is far from beeing complete.
+
+dpkg-source -x the package and change into that directory
+
+// Set the path to the patches correctly so that quilt can find them
+sven@marvin:/tmp/foo/tclcurl-7.19.0$ export QUILT_PATCHES=debian/patches
+
+// Check on the different patches available
+sven@marvin:/tmp/foo/tclcurl-7.19.0$ quilt series
+man-section
+reformat-tclcurl3
+correct-linking
+
+// Apply the correct-linking patch, this will cause quilt to apply all patches
+// stacked on the selected one first.
+sven@marvin:/tmp/foo/tclcurl-7.19.0$ quilt push correct-linking
+[...]
+
+// Take a look at the current diff
+sven@marvin:/tmp/foo/tclcurl-7.19.0$ quilt diff
+[...]
+
+
+// Open configure for editing
+sven@marvin:/tmp/foo/tclcurl-7.19.0$ quilt edit configure
+[...]
+
+// Refresh the patch you're working on
+sven@marvin:/tmp/foo/tclcurl-7.19.0$ quilt refresh
+Refreshed patch correct-linking
+
+// Remove the patch from your working stack
+sven@marvin:/tmp/foo/tclcurl-7.19.0$ quilt pop
+Removing patch correct-linking
+Restoring configure
+Restoring configure.in
+
+Now at patch reformat-tclcurl3
+
+This should be enough to get your modifications in.
+
+
+Adding patches to quilt without actually using it
+=================================================
+
+You can operate without using quilt. You just need
+to add a proper patch to debian/patches and add the
+name to the series file in the same directory.
