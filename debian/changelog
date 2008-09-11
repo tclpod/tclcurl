@@ -1,10 +1,11 @@
 tclcurl (7.19.0-1) UNRELEASED; urgency=low
 
-  * New upstream release
+  * New upstream release.
     + Refresh all patches.
     + Build-Depend at least on libcurl4 (>= 7.19.0).
   * Update mail address of the upstream maintainer in debian/copyright.
-  * Add a debian/README.source file with an introduction to quilt.
+  * Bump Standards-Version to 3.8.0.
+    + Add a debian/README.source file with an introduction to quilt.
 
  -- Sven Hoexter <sven@timegate.de>  Thu, 11 Sep 2008 20:42:36 +0200
 
