@@ -10,7 +10,18 @@ Upstream Author: Andres Garcia <fandom@telefonica.net>
 
 Copyright:
 
+Most files are under following copyright:
 	Copyright (c) 2001-2008 Andres Garcia
+
+
+The following files have a different copyright holder under the same license
+as the rest:
+
+Makefile.in
+tclconfig/tcl.m4
+	Copyright (c) 1999-2000 Scriptics Corporation.
+	Copyright (c) 2002-2005 ActiveState Corporation.
+
 
 	This software is copyrighted by Andres Garcia Garcia and other parties
 	parties.  The following terms apply to all files associated with the
