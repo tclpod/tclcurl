@@ -5,7 +5,7 @@ tclcurl (7.19.0-1) UNRELEASED; urgency=low
     + Build-Depend at least on libcurl4 (>= 7.19.0).
   * Update mail address of the upstream maintainer in debian/copyright.
   * Bump Standards-Version to 3.8.2.
-    + Add a debian/README.source file with an introduction to quilt.
+    + Add a debian/README.source file.
   * Update debian/copyright with copyright information for Makefile.in
     and tclconfig/tcl.m4. Thanks to Ondrej Certik for the pointer in
     mysqltcl which has to applied here aswell.
