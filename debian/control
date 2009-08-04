@@ -4,7 +4,7 @@ Priority: extra
 Maintainer: Sven Hoexter <sven@timegate.de>
 Build-Depends: debhelper (>> 5), tcl-dev, libcurl4-gnutls-dev (>= 7.19.0), quilt, bc
 Homepage: http://personal1.iddeo.es/andresgarci/tclcurl/english/index.html
-Standards-Version: 3.8.0
+Standards-Version: 3.8.2
 Vcs-Svn: svn://www.stormbind.net/debian-pkgs-sven/tclcurl/trunk
 
 Package: tclcurl
