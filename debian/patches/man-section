@@ -1,7 +1,6 @@
-Index: TclCurl-7.19.0/doc/tclcurl.html
-===================================================================
---- TclCurl-7.19.0.orig/doc/tclcurl.html	2008-09-11 20:37:08.000000000 +0200
-+++ TclCurl-7.19.0/doc/tclcurl.html	2008-09-11 20:37:41.000000000 +0200
+Add a section number to the manpages.
+--- a/doc/tclcurl.html
++++ b/doc/tclcurl.html
 @@ -1,7 +1,7 @@
  <HTML><HEAD><TITLE>Manpage of TclCurl</TITLE>
  </HEAD><BODY>
@@ -11,10 +10,8 @@ Index: TclCurl-7.19.0/doc/tclcurl.html
  <A NAME="lbAB">&nbsp;</A>
  <hr>
  <H2>NAME</H2>
-Index: TclCurl-7.19.0/doc/tclcurl.n
-===================================================================
---- TclCurl-7.19.0.orig/doc/tclcurl.n	2008-09-11 20:38:36.000000000 +0200
-+++ TclCurl-7.19.0/doc/tclcurl.n	2008-09-11 20:38:41.000000000 +0200
+--- a/doc/tclcurl.n
++++ b/doc/tclcurl.n
 @@ -1,7 +1,7 @@
  .\" You can view this file with:
  .\" nroff -man [file]
@@ -24,10 +21,8 @@ Index: TclCurl-7.19.0/doc/tclcurl.n
  .SH NAME
  TclCurl: - get  a  URL with FTP, FTPS, HTTP, HTTPS, SCP, SFTP, TFTP, TELNET, DICT, FILE or LDAP syntax.
  .SH SYNOPSIS
-Index: TclCurl-7.19.0/doc/tclcurl_multi.html
-===================================================================
---- TclCurl-7.19.0.orig/doc/tclcurl_multi.html	2008-09-11 20:37:56.000000000 +0200
-+++ TclCurl-7.19.0/doc/tclcurl_multi.html	2008-09-11 20:38:02.000000000 +0200
+--- a/doc/tclcurl_multi.html
++++ b/doc/tclcurl_multi.html
 @@ -1,7 +1,7 @@
  <HTML><HEAD><TITLE>Manpage of TclCurl</TITLE>
  </HEAD><BODY>
@@ -37,10 +32,8 @@ Index: TclCurl-7.19.0/doc/tclcurl_multi.html
  
  <A NAME="lbAB">&nbsp;</A>
  <H2>NAME</H2>
-Index: TclCurl-7.19.0/doc/tclcurl_multi.n
-===================================================================
---- TclCurl-7.19.0.orig/doc/tclcurl_multi.n	2008-09-11 20:38:22.000000000 +0200
-+++ TclCurl-7.19.0/doc/tclcurl_multi.n	2008-09-11 20:38:28.000000000 +0200
+--- a/doc/tclcurl_multi.n
++++ b/doc/tclcurl_multi.n
 @@ -1,7 +1,7 @@
  .\" You can view this file with:
  .\" nroff -man [file]
@@ -50,10 +43,8 @@ Index: TclCurl-7.19.0/doc/tclcurl_multi.n
  .SH NAME
  TclCurl: - get  a  URL with FTP, FTPS, HTTP, HTTPS, SCP, SFTP, TFTP, TELNET, DICT, FILE or LDAP syntax.
  .SH SYNOPSIS
-Index: TclCurl-7.19.0/doc/tclcurl_share.html
-===================================================================
---- TclCurl-7.19.0.orig/doc/tclcurl_share.html	2008-09-11 20:38:49.000000000 +0200
-+++ TclCurl-7.19.0/doc/tclcurl_share.html	2008-09-11 20:38:54.000000000 +0200
+--- a/doc/tclcurl_share.html
++++ b/doc/tclcurl_share.html
 @@ -1,7 +1,7 @@
  <HTML><HEAD><TITLE>Manpage of TclCurl</TITLE>
  </HEAD><BODY>
@@ -63,10 +54,8 @@ Index: TclCurl-7.19.0/doc/tclcurl_share.html
  
  <A NAME="lbAB">&nbsp;</A>
  <H2>NAME</H2>
-Index: TclCurl-7.19.0/doc/tclcurl_share.n
-===================================================================
---- TclCurl-7.19.0.orig/doc/tclcurl_share.n	2008-09-11 20:39:01.000000000 +0200
-+++ TclCurl-7.19.0/doc/tclcurl_share.n	2008-09-11 20:39:05.000000000 +0200
+--- a/doc/tclcurl_share.n
++++ b/doc/tclcurl_share.n
 @@ -1,7 +1,7 @@
  .\" You can view this file with:
  .\" nroff -man [file]

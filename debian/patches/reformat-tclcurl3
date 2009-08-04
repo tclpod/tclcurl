@@ -1,3 +1,4 @@
+Fix some formating errors in the manpages.
 Index: TclCurl-7.19.0/doc/tclcurl.n
 ===================================================================
 --- TclCurl-7.19.0.orig/doc/tclcurl.n	2008-09-11 09:31:45.000000000 +0200

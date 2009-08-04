@@ -1,8 +1,9 @@
-Index: TclCurl-7.19.0/configure
-===================================================================
---- TclCurl-7.19.0.orig/configure	2008-09-11 09:30:42.000000000 +0200
-+++ TclCurl-7.19.0/configure	2008-09-11 09:32:01.000000000 +0200
-@@ -6914,7 +6914,16 @@
+Strip out a few libs from the linker to lower the amount of direct depedencies
+for this package.
+See: http://lists.debian.org/debian-devel-announce/2006/09/msg00018.html
+--- a/configure
++++ b/configure
+@@ -6914,7 +6914,16 @@ fi
  echo "${ECHO_T}yes" >&6; }
  
  
@@ -20,11 +21,9 @@ Index: TclCurl-7.19.0/configure
      for i in $vars; do
  	if test "${TEA_PLATFORM}" = "windows" -a "$GCC" = "yes" ; then
  	    # Convert foo.lib to -lfoo for GCC.  No-op if not *.lib
-Index: TclCurl-7.19.0/configure.in
-===================================================================
---- TclCurl-7.19.0.orig/configure.in	2008-09-11 09:30:42.000000000 +0200
-+++ TclCurl-7.19.0/configure.in	2008-09-11 09:32:01.000000000 +0200
-@@ -127,7 +127,16 @@
+--- a/configure.in
++++ b/configure.in
+@@ -127,7 +127,16 @@ if test "${CURL_VERSION}" != "" ; then
  fi
  AC_MSG_RESULT(yes)
  

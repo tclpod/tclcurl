@@ -9,8 +9,9 @@ tclcurl (7.19.0-1) UNRELEASED; urgency=low
   * Update debian/copyright with copyright information for Makefile.in
     and tclconfig/tcl.m4. Thanks to Ondrej Certik for the pointer in
     mysqltcl which has to applied here aswell.
+  * Add description header to all patches.
 
- -- Sven Hoexter <sven@timegate.de>  Sat, 27 Dec 2008 17:30:49 +0100
+ -- Sven Hoexter <sven@timegate.de>  Tue, 04 Aug 2009 16:08:40 +0200
 
 tclcurl (7.17.1-1) unstable; urgency=low
 
