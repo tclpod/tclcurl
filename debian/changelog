@@ -10,8 +10,10 @@ tclcurl (7.19.0-1) unstable; urgency=low
     and tclconfig/tcl.m4. Thanks to Ondrej Certik for the pointer in
     mysqltcl which has to applied here aswell.
   * Add description header to all patches.
+  * Add patches/example-shebang. This patch adds a working shebang line
+    to those example files that carry one (Thanks to Sergei).
 
- -- Sven Hoexter <sven@timegate.de>  Tue, 04 Aug 2009 16:30:29 +0200
+ --
 
 tclcurl (7.17.1-1) unstable; urgency=low
 

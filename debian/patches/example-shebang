@@ -1,0 +1,26 @@
+Set the shebang to '/usr/bin/wish' for those example files
+that carry a shebang line.
+--- a/tests/multi/auto.tcl
++++ b/tests/multi/auto.tcl
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/wish8.4
++#!/usr/bin/wish
+ 
+ package require TclCurl
+ 
+--- a/tests/multi/autoGUI.tcl
++++ b/tests/multi/autoGUI.tcl
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/wish8.4
++#!/usr/bin/wish
+ 
+ package require TclCurl
+ 
+--- a/tests/multi/cancelTrans.tcl
++++ b/tests/multi/cancelTrans.tcl
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/wish8.4
++#!/usr/bin/wish
+ 
+ package require TclCurl
+ 
