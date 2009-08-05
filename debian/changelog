@@ -12,8 +12,10 @@ tclcurl (7.19.0-1) unstable; urgency=low
   * Add description header to all patches.
   * Add patches/example-shebang. This patch adds a working shebang line
     to those example files that carry one (Thanks to Sergei).
+  * Set the permissions for the example files to 644, except for those
+    with a working shebang line (Thanks to Sergei).
 
- --
+ -- Sven Hoexter <sven@timegate.de>  Wed, 05 Aug 2009 21:30:47 +0200
 
 tclcurl (7.17.1-1) unstable; urgency=low
 

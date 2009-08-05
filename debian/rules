@@ -72,6 +72,11 @@ install: build
 		$(CURDIR)/debian/tclcurl/usr/bin \
 		$(CURDIR)/debian/tclcurl/usr/include
 
+	chmod 644 \
+		$(CURDIR)/tests/*.tcl \
+		$(CURDIR)/tests/multi/double.tcl \
+		$(CURDIR)/tests/multi/single.tcl
+
 
 # Build architecture-independent files here.
 binary-indep: build install
