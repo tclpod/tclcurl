@@ -2,9 +2,10 @@ tclcurl (7.19.6-1) unstable; urgency=low
 
   * New upstream release.
     + Build-Depend at least on libcurl4 (>= 7.19.6).
+    + Refresh patches/correct-linking.
   * Bumb Standards-Version to 3.8.3 - no changes.
 
- --
+ -- Sven Hoexter <hoexter@debian.org>  Wed, 30 Sep 2009 20:55:25 +0200
 
 tclcurl (7.19.0-1) unstable; urgency=low
 

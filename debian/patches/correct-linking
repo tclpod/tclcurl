@@ -3,8 +3,8 @@ for this package.
 See: http://lists.debian.org/debian-devel-announce/2006/09/msg00018.html
 --- a/configure
 +++ b/configure
-@@ -6914,7 +6914,16 @@ fi
- echo "${ECHO_T}yes" >&6; }
+@@ -7290,7 +7290,16 @@ fi
+ $as_echo "yes" >&6; }
  
  
 -    vars="`$curlpath/curl-config --libs`"
@@ -23,7 +23,7 @@ See: http://lists.debian.org/debian-devel-announce/2006/09/msg00018.html
  	    # Convert foo.lib to -lfoo for GCC.  No-op if not *.lib
 --- a/configure.in
 +++ b/configure.in
-@@ -127,7 +127,16 @@ if test "${CURL_VERSION}" != "" ; then
+@@ -134,7 +134,16 @@ if test "${CURL_VERSION}" != "" ; then
  fi
  AC_MSG_RESULT(yes)
  
@@ -40,4 +40,4 @@ See: http://lists.debian.org/debian-devel-announce/2006/09/msg00018.html
 +
  
  #--------------------------------------------------------------------
- # A few miscellaneous platform-specific items:
+ # __CHANGE__
