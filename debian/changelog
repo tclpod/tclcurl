@@ -4,6 +4,7 @@ tclcurl (7.19.6-1) unstable; urgency=low
     + Build-Depend at least on libcurl4 (>= 7.19.6).
     + Refresh patches/correct-linking.
   * Bumb Standards-Version to 3.8.3 - no changes.
+  * Change maintainer e-mail to my @d.o address.
 
  -- Sven Hoexter <hoexter@debian.org>  Wed, 30 Sep 2009 20:55:25 +0200
 
