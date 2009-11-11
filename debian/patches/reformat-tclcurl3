@@ -1,9 +1,7 @@
 Fix some formating errors in the manpages.
-Index: TclCurl-7.19.0/doc/tclcurl.n
-===================================================================
---- TclCurl-7.19.0.orig/doc/tclcurl.n	2008-09-11 09:31:45.000000000 +0200
-+++ TclCurl-7.19.0/doc/tclcurl.n	2008-09-11 09:32:01.000000000 +0200
-@@ -687,10 +687,10 @@
+--- a/doc/tclcurl.n
++++ b/doc/tclcurl.n
+@@ -687,10 +687,10 @@ response will be treated as a valid HTTP
  
  .TP
  .B -cookie
@@ -18,7 +16,7 @@ Index: TclCurl-7.19.0/doc/tclcurl.n
  
  If  you  need  to  set mulitple cookies, you need to set them all using
  a single option and thus you need to concatenate them all in one single string.
-@@ -1384,7 +1384,7 @@
+@@ -1384,7 +1384,7 @@ are also acceptable separators but colon
  used as operators. 
  
  For OpenSSL and GnuTLS valid examples of cipher lists include 'RC4-SHA', 'SHA1+DES',
@@ -27,7 +25,7 @@ Index: TclCurl-7.19.0/doc/tclcurl.n
  
  You will find more details about cipher lists on this URL:
      http://www.openssl.org/docs/apps/ciphers.html
-@@ -1530,7 +1530,7 @@
+@@ -1530,7 +1530,7 @@ same handle. Let it return first before 
  you want parallel transfers, you must use several curl handles.
  .TP
  .B RETURN VALUE
