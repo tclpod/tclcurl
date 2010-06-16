@@ -3,7 +3,7 @@ Section: interpreters
 Priority: extra
 Maintainer: Sven Hoexter <hoexter@debian.org>
 Build-Depends: debhelper (>> 5), tcl-dev, libcurl4-gnutls-dev (>= 7.19.6), quilt, bc
-Homepage: http://personal1.iddeo.es/andresgarci/tclcurl/english/index.html
+Homepage: http://personal5.iddeo.es/andresgarci/tclcurl/english/index.html
 Standards-Version: 3.8.4
 Vcs-Svn: svn://www.stormbind.net/debian-pkgs-sven/tclcurl/trunk
 
