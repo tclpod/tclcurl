@@ -36,6 +36,8 @@ override_dh_auto_install:
 		$(CURDIR)/tests/multi/double.tcl \
 		$(CURDIR)/tests/multi/single.tcl
 
+override_dh_auto_test:
+
 override_dh_makeshlibs:
 	dh_makeshlibs
 	tcltk-depends
