@@ -10,6 +10,7 @@ tclcurl (7.19.6-2) UNRELEASED; urgency=low
     + Shorten debian/rules to the bare essentials.
     + Override dh_makeshlibs call to add tcltk-depends.
   * Add debian/source/format -> 1.0.
+  * Add a watch file.
 
  -- Sven Hoexter <hoexter@debian.org>  Wed, 16 Jun 2010 22:31:49 +0200
 

@@ -1,0 +1,3 @@
+version=3
+http://personal.iddeo.es/andresgarci/tclcurl/english/download.html \
+ ../download/tarball/TclCurl-([\d\.]+).tar.gz
