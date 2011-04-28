@@ -1,4 +1,4 @@
-tclcurl (7.19.6-2) UNRELEASED; urgency=low
+tclcurl (7.19.6-2) unstable; urgency=low
 
   * Bumb Standards-Version to 3.9.2 - no changes.
   * Add ${misc:Depends} to the binary package.
@@ -11,7 +11,7 @@ tclcurl (7.19.6-2) UNRELEASED; urgency=low
     + Override dh_makeshlibs call to add tcltk-depends.
     + Override dh_clean to not remove several left-overs included upstream.
     + Override dh_installexamples to not install a.tcl~.
-    + Emtpy override for dh_auto_test, the reference all.tcl doesn't exist;
+    + Emtpy override for dh_auto_test, the referenced all.tcl doesn't exist;
       Most of the tests require network access anyway, which isn't given
       on the buildds.
   * Add debian/source/format -> 1.0.
@@ -19,7 +19,7 @@ tclcurl (7.19.6-2) UNRELEASED; urgency=low
   * Add debian/patches/(man-hyphen-as-minus|man-spelling) to fix several
     manpage issue flagged by lintian.
 
- -- Sven Hoexter <hoexter@debian.org>  Wed, 16 Jun 2010 22:31:49 +0200
+ -- Sven Hoexter <hoexter@debian.org>  Thu, 28 Apr 2011 13:51:13 +0200
 
 tclcurl (7.19.6-1) unstable; urgency=low
 
