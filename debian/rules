@@ -3,67 +3,23 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-include /usr/share/quilt/quilt.make
-
-
-ifeq ($(DEB_BUILD_GNU_TYPE), $(DEB_HOST_GNU_TYPE))
-        CONFIGURE_OPTIONS += --build $(DEB_HOST_GNU_TYPE)
-else
-        CONFIGURE_OPTIONS += --build $(DEB_BUILD_GNU_TYPE) \
-                --host $(DEB_HOST_GNU_TYPE)
-endif
-
-
-CONFIGURE_OPTIONS += \
-	--prefix=/usr \
-	--mandir=/usr/share/man \
-	--infodir=/usr/share/info \
-	--enable-threads \
-	--with-tcl=/usr/lib \
-	--with-tclinclude=/usr/include/tcl \
-
-
 LDFLAGS += -Wl,-z,defs -Wl,--as-needed
 
-CFLAGS = -Wall -g
+%:
+        dh $@ --with quilt
 
-ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
-        CFLAGS += -O0
-else
-        CFLAGS += -O2
-endif
+override_dh_auto_configure:
+        dh_auto_configure -- \
+		--prefix=/usr \
+		--mandir=/usr/share/man \
+		--infodir=/usr/share/info \
+		--enable-threads \
+		--with-tcl=/usr/lib \
+		--with-tclinclude=/usr/include/tcl \
 
+override_dh_auto_install:
+	dh_auto_install --destdir=$(CURDIR)/debian/tclcurl
 
-configure: patch configure-stamp
-configure-stamp:
-	dh_testdir
-
-	CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" \
-	./configure $(CONFIGURE_OPTIONS)
-
-	touch configure-stamp
-
-build: configure build-stamp
-build-stamp: configure-stamp
-	dh_testdir
-	$(MAKE)
-	touch build-stamp
-
-clean: cleaner unpatch
-cleaner:
-	dh_testdir
-	dh_testroot
-	rm -f build-stamp configure-stamp   
-	[ ! -f Makefile ] || $(MAKE) distclean
-	dh_clean
-
-install: build
-	dh_testdir
-	dh_testroot
-	dh_clean -k
-	dh_installdirs
-
-	$(MAKE) install DESTDIR=$(CURDIR)/debian/tclcurl
 	mkdir $(CURDIR)/debian/tclcurl/usr/lib/tcltk
 	mv $(CURDIR)/debian/tclcurl/usr/lib/TclCurl* \
 		$(CURDIR)/debian/tclcurl/usr/lib/tcltk
@@ -77,29 +33,6 @@ install: build
 		$(CURDIR)/tests/multi/double.tcl \
 		$(CURDIR)/tests/multi/single.tcl
 
-
-# Build architecture-independent files here.
-binary-indep: build install
-# We have nothing to do by default.
-
-# Build architecture-dependent files here.
-binary-arch: build install
-	dh_testdir
-	dh_testroot
-	dh_installdocs Changes.txt
-	dh_installman
-	dh_installchangelogs ChangeLog.txt
-	dh_installexamples
-	dh_link
-	dh_strip
-	dh_compress
-	dh_fixperms
-	dh_installdeb
-	dh_shlibdeps
+override_dh_makeshlibs:
+	dh_makeshlibs
 	tcltk-depends
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
-
-binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install configure
