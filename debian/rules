@@ -38,6 +38,9 @@ override_dh_auto_install:
 
 override_dh_auto_test:
 
+override_dh_installexamples:
+	dh_installexamples -Xa.tcl~
+
 override_dh_makeshlibs:
 	dh_makeshlibs
 	tcltk-depends

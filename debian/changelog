@@ -10,6 +10,7 @@ tclcurl (7.19.6-2) UNRELEASED; urgency=low
     + Shorten debian/rules to the bare essentials.
     + Override dh_makeshlibs call to add tcltk-depends.
     + Override dh_clean to not remove several left-overs included upstream.
+    + Override dh_installexamples to not install a.tcl~.
     + Emtpy override for dh_auto_test, the reference all.tcl doesn't exist;
       Most of the tests require network access anyway, which isn't given
       on the buildds.
