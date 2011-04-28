@@ -1,0 +1,68 @@
+Fix several hyphen-as-minus problems flagged by lintian.
+--- a/doc/tclcurl.n
++++ b/doc/tclcurl.n
+@@ -294,7 +294,7 @@ too low might cause unnecessary connecti
+ .TP
+ .B -dnscachetimeout
+ Pass the timeout in seconds. Name resolves will be kept in memory for this number
+-of seconds. Set to '0' to completely disable caching, or '-1' to make the
++of seconds. Set to '0' to completely disable caching, or '\-1' to make the
+ cached entries remain forever. By default, TclCurl caches this info for 60 seconds.
+ 
+ .TP
+@@ -498,7 +498,7 @@ is  meaningful  only  when setting \fB-f
+ Sets the redirection limit. If that many redirections have been followed,
+ the next redirect will cause an error. This option only makes sense if the
+ \fB-followlocation\fP option is used at the same time. Setting the limit
+-to 0 will make libcurl refuse any redirect. Set it to -1 for an infinite
++to 0 will make libcurl refuse any redirect. Set it to \-1 for an infinite
+ number of redirects (which is the default)
+ 
+ .TP
+@@ -1026,7 +1026,7 @@ Pass the offset in number of bytes that
+ Set this option to 0 to make the transfer start from the beginning
+ (effectively disabling resume).
+ 
+-For FTP, set this option to -1 to make the transfer start from the end of the
++For FTP, set this option to \-1 to make the transfer start from the end of the
+ target file (useful to continue an interrupted upload). 
+ 
+ .TP
+@@ -1626,7 +1626,7 @@ Internal error. A function was called wi
+ Interface error. A specified outgoing interface could not be used.
+ .IP 47
+ Too many redirects. When following redirects, TclCurl hit the maximum amount, set
+-your limit with --maxredirs
++your limit with \-\-maxredirs
+ .IP 48
+ Unknown TELNET option specified.
+ .IP 49
+@@ -1720,7 +1720,7 @@ Returns the last received proxy response
+ .TP
+ .B filetime
+ Returns the remote time of the retrieved document (in number of seconds
+-since 1 jan 1970 in the GMT/UTC time zone). If you get -1,
++since 1 jan 1970 in the GMT/UTC time zone). If you get \-1,
+ it can be because of many reasons (unknown, the server hides it or the
+ server doesn't support the command that tells document time etc) and the time
+ of the document is unknown.
+@@ -1824,7 +1824,7 @@ requests. Note that this may be more tha
+ .TP
+ .B sslverifyresult
+ Returns the result of the certification verification that was requested
+-(using the -sslverifypeer option to configure).
++(using the \-sslverifypeer option to configure).
+ 
+ .TP
+ .B sslengines
+--- a/doc/tclcurl_multi.n
++++ b/doc/tclcurl_multi.n
+@@ -174,7 +174,7 @@ you can use the
+ command, it will return the number of transfers currently active.
+ .sp
+ .B RETURN VALUE
+-The number of active transfers or '-1' in case of error.
++The number of active transfers or '\-1' in case of error.
+ 
+ .SH multiHandle getinfo
+ This procedure returns very simple information about the transfers, you
