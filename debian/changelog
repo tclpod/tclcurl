@@ -1,4 +1,4 @@
-tclcurl (7.19.6-3) UNRELEASED; urgency=low
+tclcurl (7.19.6-3) unstable; urgency=low
 
   * Add debian/patches/deprecated-curl-types to no longer include
     curl/types.h and curl/easy.h. Both are deprecated and got removed
