@@ -1,3 +1,11 @@
+tclcurl (7.19.6-3) UNRELEASED; urgency=low
+
+  * Add debian/patches/deprecated-curl-types to no longer include
+    curl/types.h and curl/easy.h. Both are deprecated and got removed
+    from recent curl releases. (Closes: #636558)
+
+ -- Sven Hoexter <hoexter@debian.org>  Thu, 04 Aug 2011 19:52:22 +0200
+
 tclcurl (7.19.6-2) unstable; urgency=low
 
   * Bumb Standards-Version to 3.9.2 - no changes.
