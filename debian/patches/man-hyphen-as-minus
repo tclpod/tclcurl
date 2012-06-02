@@ -19,7 +19,7 @@ Fix several hyphen-as-minus problems flagged by lintian.
  cached entries remain forever. By default, TclCurl caches this info for 60 seconds.
  
  The name resolve functions of various libc implementations don't re-read name
-@@ -761,7 +761,7 @@ is  meaningful  only  when setting \fB-f
+@@ -762,7 +762,7 @@ is  meaningful  only  when setting \fB-f
  Sets the redirection limit. If that many redirections have been followed,
  the next redirect will cause an error. This option only makes sense if the
  \fB-followlocation\fP option is used at the same time. Setting the limit
@@ -28,7 +28,7 @@ Fix several hyphen-as-minus problems flagged by lintian.
  number of redirects (which is the default)
  
  .TP
-@@ -1341,7 +1341,7 @@ Pass the offset in number of bytes that
+@@ -1342,7 +1342,7 @@ Pass the offset in number of bytes that
  Set this option to 0 to make the transfer start from the beginning
  (effectively disabling resume).
  
@@ -37,7 +37,16 @@ Fix several hyphen-as-minus problems flagged by lintian.
  target file (useful to continue an interrupted upload). 
  
  When doing uploads with FTP, the resume position is where in the local/source
-@@ -2077,7 +2077,7 @@ Internal error. A function was called wi
+@@ -1537,7 +1537,7 @@ HOST+PORT will instead use your provided
+ 
+ You can remove names from the DNS cache again, to stop providing these fake
+ resolves, by including a string in the linked list that uses the format
+-"-HOST:PORT". The host name must be prefixed with a dash, and the host name
++"\-HOST:PORT". The host name must be prefixed with a dash, and the host name
+ and port number must exactly match what was already added previously.
+ 
+ .TP
+@@ -2078,7 +2078,7 @@ Internal error. A function was called wi
  Interface error. A specified outgoing interface could not be used.
  .IP 47
  Too many redirects. When following redirects, TclCurl hit the maximum amount, set
@@ -46,7 +55,7 @@ Fix several hyphen-as-minus problems flagged by lintian.
  .IP 48
  An option passed to TclCurl is not recognized/known. Refer to the appropriate
  documentation. This is most likely a problem in the program that uses
-@@ -2186,7 +2186,7 @@ Returns the last received proxy response
+@@ -2187,7 +2187,7 @@ Returns the last received proxy response
  .TP
  .B filetime
  Returns the remote time of the retrieved document (in number of seconds
@@ -55,7 +64,7 @@ Fix several hyphen-as-minus problems flagged by lintian.
  it can be because of many reasons (unknown, the server hides it or the
  server doesn't support the command that tells document time etc) and the time
  of the document is unknown.
-@@ -2303,7 +2303,7 @@ requests. Note that this may be more tha
+@@ -2304,7 +2304,7 @@ requests. Note that this may be more tha
  .TP
  .B sslverifyresult
  Returns the result of the certification verification that was requested
@@ -64,6 +73,15 @@ Fix several hyphen-as-minus problems flagged by lintian.
  
  .TP
  .B sslengines
+@@ -2316,7 +2316,7 @@ engines may be available at run-time.
+ .B contentlengthdownload
+ Returns the content-length of the download. This is the value read from the
+ .B Content-Length:
+-field. If the size isn't known, it returns -1.
++field. If the size isn't known, it returns \-1.
+ 
+ .TP
+ .B contentlengthupload
 --- a/doc/tclcurl_multi.n
 +++ b/doc/tclcurl_multi.n
 @@ -186,7 +186,7 @@ you can use the

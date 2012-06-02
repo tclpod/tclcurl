@@ -28,7 +28,7 @@ Fix a few spelling issue flagged by lintian.
  one it finds most secure.
  .RE
  
-@@ -971,7 +971,7 @@ a single option and thus you need to con
+@@ -972,7 +972,7 @@ a single option and thus you need to con
  Set multiple cookies in one string like this: "name1=content1; name2=content2;"
  etc.
  
@@ -37,7 +37,7 @@ Fix a few spelling issue flagged by lintian.
  If multiple requests are done due to authentication, followed redirections or similar,
  they will all get this cookie passed on.
  
-@@ -1467,7 +1467,7 @@ than or equal to the parameter value. De
+@@ -1468,7 +1468,7 @@ than or equal to the parameter value. De
  
  .TP
  .B -maxconnects
@@ -46,7 +46,7 @@ Fix a few spelling issue flagged by lintian.
  persistent conecctions. The set amount will be the maximum amount of simultaneous
  connections that TclCurl may cache in this easy handle. Default is 5, and there
  isn't much point in changing this value unless you are perfectly aware of how this
-@@ -2412,7 +2412,7 @@ to pause the transfer.
+@@ -2413,7 +2413,7 @@ to pause the transfer.
  Resumes a transfer paused with \fBcurlhandle pause\fP
  
  .SH curl::transfer
