@@ -1,6 +1,15 @@
 Fix several hyphen-as-minus problems flagged by lintian.
 --- a/doc/tclcurl.n
 +++ b/doc/tclcurl.n
+@@ -397,7 +397,7 @@ HTTP proxies.
+ .B -proxyport
+ Use this option to set the proxy port to use unless it is specified in
+ the proxy string by \fB-proxy\fP. If not specified, TclCurl will default
+--to using port 1080 for proxies.
++to using port 1080 for proxies.
+ 
+ .TP
+ .B -proxytype
 @@ -460,7 +460,7 @@ too low might cause unnecessary connecti
  .TP
  .B -dnscachetimeout
