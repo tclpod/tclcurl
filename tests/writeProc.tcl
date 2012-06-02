@@ -4,19 +4,19 @@ package require TclCurl
 
 proc writeToFile {readData} {
     puts "writeToFile called [incr ::i]"
-    puts -nonewline $::inFile $readData
+    puts -nonewline $::outFile $readData
 
     return
 }
 
 set i 0
 
-set inFile [open "cosa.tar" w+]
-fconfigure $inFile -translation binary
+set outFile [open "cosa.tar" w+]
+fconfigure $outFile -translation binary
 
 curl::transfer -url "127.0.0.1/~andres/cosa&co.tar" -writeproc writeToFile
 
-close $inFile
+close $outFile
 
 
 

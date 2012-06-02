@@ -1,13 +1,13 @@
-TCL_VERSION     = 8.5.7
-TCLCURL_VERSION = 7.19.6
-TclCurl_nodot   = 7.196
-CURL_VERSION    = 7.19.6
-ZLIB_VERSION    = 1.2.3
+TCL_VERSION     = 8.5.10
+TCLCURL_VERSION = 7.22.0
+TclCurl_nodot   = 7.220
+CURL_VERSION    = 7.22.0
+ZLIB_VERSION    = 1.2.5
 
-installFiles = ChangeLog.txt changes.txt license.terms ReadMe.txt ReadMeW32.txt ToDo.txt packages/Windows/SetUp.tcl
+installFiles = ChangeLog.txt changes.txt license.terms ReadMe.txt ReadMeW32.txt packages/Windows/SetUp.tcl
 installDirs  = tests
-certFiles    = curl-${CURL_VERSION}/lib/cacert.pem
-sslFiles     = libeay32.dll libssl32.dll
+certFiles    = cacert.pem
+sslFiles     = libeay32.dll ssleay32.dll
 docFiles     = aolserver.txt OpenSSL-LICENSE.txt tclcurl.html tclcurl_multi.html tclcurl_share.html
 
 tclcurl-plain:        DESTDIR = TclCurl-${TCLCURL_VERSION}
@@ -92,6 +92,6 @@ docs:
 	done
 
 rar:
-	c:/Archiv~1/WinRAR/rar a -r -s -sfx  ${DESTDIR}.exe ${DESTDIR};\
+	"c:/Program Files (x86)/WinRAR/rar" a -r -s -sfx  ${DESTDIR}.exe ${DESTDIR};\
 	rm -r ${DESTDIR}
 

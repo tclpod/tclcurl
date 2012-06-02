@@ -1,9 +1,10 @@
 .\" You can view this file with:
 .\" nroff -man [file]
 .\" Adapted from libcurl docs by fandom@telefonica.net
-.TH TclCurl n "8 September 2008" "TclCurl 7.19.0" "TclCurl Multi Interface"
+.TH TclCurl n "3 October 2011" "TclCurl 7.22.0 "TclCurl Easy Interface"
 .SH NAME
-TclCurl: - get  a  URL with FTP, FTPS, HTTP, HTTPS, SCP, SFTP, TFTP, TELNET, DICT, FILE or LDAP syntax.
+TclCurl: - get  a  URL with FTP, FTPS, HTTP, HTTPS, SCP, SFTP, TFTP, TELNET, DICT, FILE, LDAP,
+LDAPS, IMAP, IMAPS, POP, POP3, SMTP, SMTPS and gopher syntax.
 .SH SYNOPSIS
 .BI "curl::multiinit"
 .sp
@@ -45,13 +46,17 @@ the future, you should be aware of the following current restrictions:
 .TP
 .B GnuTLS SSL connections.
 .TP
+.B GnuTLS SSL connections
+.TP
 .B Active FTP connections.
 .TP
 .B HTTP proxy CONNECT operations.
 .TP
-.B TFTP transfers
+.B SOCKS proxy handshakes
 .TP
 .B file:// transfers.
+.TP
+.B TELNET transfers
 .RE
 
 .SH curl::multiinit
@@ -124,7 +129,7 @@ Out of memory, you should never get this.
 You found a bug in TclCurl.
 .sp
 .SH multiHandle configure
-So far the only option is:
+So far the only options are:
 .TP
 .B -pipelining
 Pass a 1 to enable or 0 to disable. Enabling pipelining on a multi handle will
@@ -155,15 +160,22 @@ It'll use the callbacks and everything else we have setup in the individual
 easy handles. It'll transfer data on all current transfers in the multi stack
 that are ready to transfer anything. It may be all, it may be none.
 
-When you call \fBperform\fP and the amount of Irunning handles is
+When you call \fBperform\fP and the amount of running handles is
 changed from the previous call (or is less than the amount of easy handles
 you added to the multi handle), you know that there is one or more
 transfers less "running". You can then call \fIgetinfo\fP to
-get information about each individual completed transfer.
+get information about each individual completed transfer. If an added handle
+fails very quickly, it may never be counted as a running handle. 
+
 .sp
 .B RETURN VALUE
 If everything goes well, it returns the number of running handles, '0' if all
 are done. In case of error, it will return the error code.
+
+This function only returns errors etc regarding the whole multi stack.
+Problems still might have occurred on individual transfers even when this
+function returns ok.
+
 .sp
 .SH multiHandle active
 In order to know if any of the easy handles are ready to transfer data before

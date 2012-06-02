@@ -89,49 +89,11 @@ You have to do basically the same thing, except that the command to compile is:
 
 Compiling TclCurl with SSL support
 
-To prevent patent trouble, the SSL enabled binaries don't support the idea, rc5 and mdc2
-algorithms, if you need them, and you are allowed to do so, you can compile them yourself.
+Since 1.0.0 openssl is easier to compile, you can find the instructions to it in
+the INSTALL.W32 file in the openssl tarball.
 
-
-      - First of all you have to compile Openssl, you can get the lastest version
-        at http://www.openssl.org, these instructions should work with version 0.9.8e
-
-      - To compile it you are going to need Perl in your system, for whatever the reason
-        I couldn't get it to work with the Perl that comes with Cygwin, so I had to
-        download ActivePerl: http://www.activestate.com.
-
-      - You will also need to download the MinGW compiler, the compiling scripts don't
-        like the msys enviroment though.
-
-      - The open a MS-DOS console in the openssl directory and make sure that both
-        perl and mingw are in you path:
-
-            c:\openssl-0.9.8e\> echo %PATH%
-
-        if they aren't add them:
-
-            c:\openssl-0.9.8e\> PATH=%PATH%;C:\Perl\bin;c:\MinGW\bin
-
-        change the paths if you need to.
-
-      - Only thing left is to type in the MS-DOS console:
-
-             c:\openssl-0.9.8e\> ms\mingw32.bat
- 
-        and hope for the best.
-
-      - After it compiles you have to copy some files around:
-
-        - libcryto.a, libeay32.a, libssl.a and libssl32.a from 
-          openssl-0.9.8e\out to c:\msys\local\lib.
-
-        - libeay32.dll and libssl32.dll from openssl-0.9.8e to
-          c:\msys\local\lib and c:\msys\local\bin.
-
-        - The contents of openssl-0.9.8e\outinc to c:\msys\local\include.
-
-      - Now copy the 'tclcurl.mk' file from TclCurl/packages/windows to
-        the directory in which you have TclCurl, Tcl, cURL, TclCurl and OpenSSL.
+You can get the cacert.pem at http://curl.haxx.se/ca/, you need to put in the
+directory from which you are going to compile
 
         - $ make -f tclcurl.mk tclcurl-ssl
 

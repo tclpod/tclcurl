@@ -4,7 +4,7 @@
  * Implementation of the TclCurl extension that creates the curl namespace
  * so that Tcl interpreters can access libcurl.
  *
- * Copyright (c) 2001-2009 Andres Garcia Garcia.
+ * Copyright (c) 2001-2011 Andres Garcia Garcia.
  *
  * See the file "license.terms" for information on usage and redistribution
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
@@ -57,7 +57,7 @@ Tclcurl_Init (Tcl_Interp *interp) {
 
     Tclcurl_MultiInit(interp);
 
-    Tcl_PkgProvide(interp,"TclCurl","7.19.6");
+    Tcl_PkgProvide(interp,"TclCurl","7.22.0");
 
     return TCL_OK;
 }
@@ -352,12 +352,12 @@ curlSetOptsTransfer(Tcl_Interp *interp, struct curlObjData *curlData,
         int objc, Tcl_Obj *CONST objv[]) {
 
     int            tableIndex;
-fprintf(stdout,"Llegamos a curlSetOptsTrasnfer\n");
+
     if (Tcl_GetIndexFromObj(interp, objv[2], optionTable, "option", 
             TCL_EXACT, &tableIndex)==TCL_ERROR) {
         return TCL_ERROR;
     }
-fprintf(stdout,"La opcion es la %d\n",tableIndex);
+
     return  curlSetOpts(interp,curlData,objv[3],tableIndex);
 }
 
@@ -453,7 +453,7 @@ curlSetOpts(Tcl_Interp *interp, struct curlObjData *curlData,
     int                       curlformBufferSize;
     size_t                    contentslen;
 
-    ulong                     protocolMask;
+    unsigned long int         protocolMask;
 
     switch(tableIndex) {
         case 0:
@@ -1223,12 +1223,12 @@ curlSetOpts(Tcl_Interp *interp, struct curlObjData *curlData,
                 return TCL_ERROR;
             }
             if (tableIndex==2) {
-                if (curl_easy_setopt(curlHandle,CURLOPT_ENCODING,"")) {
+                if (curl_easy_setopt(curlHandle,CURLOPT_ACCEPT_ENCODING,"")) {
                     curlErrorSetOpt(interp,configTable,86,"all");
                     return 1;
                 }
             } else {
-                if (SetoptChar(interp,curlHandle,CURLOPT_ENCODING,86,objv)) {
+                if (SetoptChar(interp,curlHandle,CURLOPT_ACCEPT_ENCODING,86,objv)) {
                     return TCL_ERROR;
                 }
             }
@@ -1242,15 +1242,23 @@ curlSetOpts(Tcl_Interp *interp, struct curlObjData *curlData,
                 case 0:
                     curl_easy_setopt(curlHandle,CURLOPT_PROXYTYPE,
                             CURLPROXY_HTTP);
+                    break;
                 case 1:
                     curl_easy_setopt(curlHandle,CURLOPT_PROXYTYPE,
-                            CURLPROXY_SOCKS4);
+                            CURLPROXY_HTTP_1_0);
+                    break;
                 case 2:
                     curl_easy_setopt(curlHandle,CURLOPT_PROXYTYPE,
-                            CURLPROXY_SOCKS4A);                            
+                            CURLPROXY_SOCKS4);
+                    break;
+                case 3:
+                    curl_easy_setopt(curlHandle,CURLOPT_PROXYTYPE,
+                            CURLPROXY_SOCKS4A);
+                    break;
                 case 4:
                     curl_easy_setopt(curlHandle,CURLOPT_PROXYTYPE,
                             CURLPROXY_SOCKS5);
+                    break;
                 case 5:
                     curl_easy_setopt(curlHandle,CURLOPT_PROXYTYPE,
                             CURLPROXY_SOCKS5_HOSTNAME);
@@ -1314,6 +1322,9 @@ curlSetOpts(Tcl_Interp *interp, struct curlObjData *curlData,
                 case 6:
                     longNumber=CURLAUTH_ANYSAFE;
                     break;
+                case 7:
+                    longNumber=CURLAUTH_NTLM_WB;
+                    break;
             }
             tmpObjPtr=Tcl_NewLongObj(longNumber);
             if (SetoptLong(interp,curlHandle,CURLOPT_HTTPAUTH
@@ -1345,11 +1356,12 @@ curlSetOpts(Tcl_Interp *interp, struct curlObjData *curlData,
                 case 3:
                     longNumber=CURLAUTH_NTLM;
                     break;
-                case 4:
-                    longNumber=CURLAUTH_ANY;
-                    break;
                 case 5:
                     longNumber=CURLAUTH_ANYSAFE;
+                    break;
+                case 4:
+                default:
+                    longNumber=CURLAUTH_ANY;
                     break;
             }
             tmpObjPtr=Tcl_NewLongObj(longNumber);
@@ -1815,7 +1827,49 @@ curlSetOpts(Tcl_Interp *interp, struct curlObjData *curlData,
                     case 11:            /* tftp  2048 */
                         protocolMask|=CURLPROTO_TFTP;
                         break;
-                    case 12:            /* all   FFFF */
+                    case 12:            /* imap  4096 */
+                        protocolMask|=CURLPROTO_IMAP;
+                        break;
+                    case 13:            /* imaps */
+                        protocolMask|=CURLPROTO_IMAPS;
+                        break;
+                    case 14:            /* pop3 */
+                        protocolMask|=CURLPROTO_POP3;
+                        break;
+                    case 15:            /* pop3s */
+                        protocolMask|=CURLPROTO_POP3S;
+                        break;
+                    case 16:            /* smtp */
+                        protocolMask|=CURLPROTO_SMTP;
+                        break;
+                    case 17:            /* smtps */
+                        protocolMask|=CURLPROTO_SMTPS;
+                        break;
+                    case 18:            /* rtsp */
+                        protocolMask|=CURLPROTO_RTSP;
+                        break;
+                    case 19:            /* rtmp */
+                        protocolMask|=CURLPROTO_RTMP;
+                        break;
+                    case 20:            /* rtmpt */
+                        protocolMask|=CURLPROTO_RTMPT;
+                        break;
+                    case 21:            /* rtmpe */
+                        protocolMask|=CURLPROTO_RTMPE;
+                        break;
+                    case 22:            /* rtmpte */
+                        protocolMask|=CURLPROTO_RTMPTE;
+                        break;
+                    case 23:            /* rtmps */
+                        protocolMask|=CURLPROTO_RTMPS;
+                        break;
+                    case 24:            /* rtmpts */
+                        protocolMask|=CURLPROTO_RTMPTS;
+                        break;
+                    case 25:            /* gopher */
+                        protocolMask|=CURLPROTO_GOPHER;
+                        break;
+                    case 26:            /* all   FFFF */
                         protocolMask|=CURLPROTO_ALL;
                 }
             }
@@ -1865,6 +1919,172 @@ curlSetOpts(Tcl_Interp *interp, struct curlObjData *curlData,
                 return TCL_ERROR;
             }
             curlData->sshkeycallProc=curlstrdup(Tcl_GetString(objv));
+            break;
+        case 159:
+            if (SetoptChar(interp,curlHandle,CURLOPT_MAIL_FROM,
+                    tableIndex,objv)) {
+                return TCL_ERROR;
+            }
+            break;
+        case 160:
+            if(SetoptsList(interp,&curlData->mailrcpt,objv)) {
+                curlErrorSetOpt(interp,configTable,tableIndex,"mailrcpt invalid");
+                return TCL_ERROR;
+            }
+            if (curl_easy_setopt(curlHandle,CURLOPT_MAIL_RCPT,curlData->mailrcpt)) {
+                curlErrorSetOpt(interp,configTable,tableIndex,"mailrcpt invalid");
+                curl_slist_free_all(curlData->mailrcpt);
+                curlData->mailrcpt=NULL;
+                return TCL_ERROR;
+            }
+            return TCL_OK;
+            break;
+        case 161:
+            if (SetoptLong(interp,curlHandle,CURLOPT_FTP_USE_PRET,
+                        tableIndex,objv)) {
+                return TCL_ERROR;
+            }
+            break;
+        case 162:
+            if (SetoptLong(interp,curlHandle,CURLOPT_WILDCARDMATCH,
+                        tableIndex,objv)) {
+                return TCL_ERROR;
+            }
+            break;
+        case 163:
+            curlData->chunkBgnProc=curlstrdup(Tcl_GetString(objv));
+            if (strcmp(curlData->chunkBgnProc,"")) {
+                if (curl_easy_setopt(curlHandle,CURLOPT_CHUNK_BGN_FUNCTION,
+                        curlChunkBgnProcInvoke)) {
+                    return TCL_ERROR;
+                }
+            } else {
+                curl_easy_setopt(curlHandle,CURLOPT_CHUNK_BGN_FUNCTION,NULL);
+                return TCL_OK;
+            }
+            if (curl_easy_setopt(curlHandle,CURLOPT_CHUNK_DATA,curlData)) {
+                return TCL_ERROR;
+            }
+            break;
+        case 164:
+            curlData->chunkBgnVar=curlstrdup(Tcl_GetString(objv));
+            if (!strcmp(curlData->chunkBgnVar,"")) {
+                curlErrorSetOpt(interp,configTable,tableIndex,"invalid var name");
+                return TCL_ERROR;
+            }
+            break;
+        case 165:
+            curlData->chunkEndProc=curlstrdup(Tcl_GetString(objv));
+            if (strcmp(curlData->chunkEndProc,"")) {
+                if (curl_easy_setopt(curlHandle,CURLOPT_CHUNK_END_FUNCTION,
+                        curlChunkEndProcInvoke)) {
+                    return TCL_ERROR;
+                }
+            } else {
+                curl_easy_setopt(curlHandle,CURLOPT_CHUNK_END_FUNCTION,NULL);
+                return TCL_OK;
+            }
+            break;
+        case 166:
+            curlData->fnmatchProc=curlstrdup(Tcl_GetString(objv));
+            if (strcmp(curlData->fnmatchProc,"")) {
+                if (curl_easy_setopt(curlHandle,CURLOPT_FNMATCH_FUNCTION,
+                        curlfnmatchProcInvoke)) {
+                    return TCL_ERROR;
+                }
+            } else {
+                curl_easy_setopt(curlHandle,CURLOPT_FNMATCH_FUNCTION,NULL);
+                return TCL_OK;
+            }
+            if (curl_easy_setopt(curlHandle,CURLOPT_FNMATCH_DATA,curlData)) {
+                return TCL_ERROR;
+            }
+            break;
+        case 167:
+            if(SetoptsList(interp,&curlData->resolve,objv)) {
+                curlErrorSetOpt(interp,configTable,tableIndex,"invalid list");
+                return TCL_ERROR;
+            }
+            if (curl_easy_setopt(curlHandle,CURLOPT_RESOLVE,curlData->resolve)) {
+                curlErrorSetOpt(interp,configTable,tableIndex,"resolve list invalid");
+                curl_slist_free_all(curlData->resolve);
+                curlData->resolve=NULL;
+                return TCL_ERROR;
+            }
+            return TCL_OK;
+            break;
+        case 168:
+            if (SetoptChar(interp,curlHandle,CURLOPT_TLSAUTH_USERNAME,
+                    tableIndex,objv)) {
+                return TCL_ERROR;
+            }
+            break;
+        case 169:
+            if (SetoptChar(interp,curlHandle,CURLOPT_TLSAUTH_PASSWORD,
+                    tableIndex,objv)) {
+                return TCL_ERROR;
+            }
+            break;
+        case 170:
+            if (Tcl_GetIndexFromObj(interp, objv, tlsauth,
+                "TSL auth option ",TCL_EXACT,&intNumber)==TCL_ERROR) {
+                return TCL_ERROR;
+            }
+            switch(intNumber) {
+                case 0:
+                    longNumber=CURL_TLSAUTH_NONE;
+                    break;
+                case 1:
+                    longNumber=CURL_TLSAUTH_SRP;
+            }
+            tmpObjPtr=Tcl_NewLongObj(longNumber);
+            if (SetoptLong(interp,curlHandle,CURLOPT_TLSAUTH_TYPE,
+                        tableIndex,tmpObjPtr)) {
+                return TCL_ERROR;
+            }
+            break;
+        case 171:
+            if (SetoptLong(interp,curlHandle,CURLOPT_TRANSFER_ENCODING,
+                        tableIndex,objv)) {
+                return TCL_ERROR;
+            }
+            break;
+        case 172:
+            if (Tcl_GetIndexFromObj(interp, objv, gssapidelegation,
+                "GSS API delegation option ",TCL_EXACT,&intNumber)==TCL_ERROR) {
+                return TCL_ERROR;
+            }
+            switch(intNumber) {
+                case 0:
+                    longNumber=CURLGSSAPI_DELEGATION_FLAG;
+                    break;
+                case 1:
+                    longNumber=CURLGSSAPI_DELEGATION_POLICY_FLAG;
+            }
+            tmpObjPtr=Tcl_NewLongObj(longNumber);
+            if (SetoptLong(interp,curlHandle,CURLOPT_GSSAPI_DELEGATION,
+                        tableIndex,tmpObjPtr)) {
+                return TCL_ERROR;
+            }
+            break;
+        case 173:
+            if (SetoptChar(interp,curlHandle,CURLOPT_NOPROXY,
+                    tableIndex,objv)) {
+                return TCL_ERROR;
+            }
+            break;
+        case 174:
+            if(SetoptsList(interp,&curlData->telnetoptions,objv)) {
+                curlErrorSetOpt(interp,configTable,tableIndex,"invalid list");
+                return TCL_ERROR;
+            }
+            if (curl_easy_setopt(curlHandle,CURLOPT_TELNETOPTIONS,curlData->telnetoptions)) {
+                curlErrorSetOpt(interp,configTable,tableIndex,"telnetoptions list invalid");
+                curl_slist_free_all(curlData->telnetoptions);
+                curlData->telnetoptions=NULL;
+                return TCL_ERROR;
+            }
+            return TCL_OK;
             break;
     }
     return TCL_OK;
@@ -2324,7 +2544,6 @@ curlWriteProcInvoke(void *ptr,size_t size,size_t nmemb,FILE *curlDataPtr) {
     if (Tcl_EvalObjv(curlData->interp,2,objv,TCL_EVAL_GLOBAL)!=TCL_OK) {
         return -1;
     }
-
     return realsize;
 }
 
@@ -2374,6 +2593,193 @@ curlReadProcInvoke(void *ptr,size_t size,size_t nmemb,FILE *curlDataPtr) {
     memcpy(ptr,readBytes,sizeRead);
 
     return sizeRead;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * curlChunkBgnProcInvoke --
+ *
+ *  This is the function that will be invoked as a callback when the user
+ *  wants to invoke a Tcl procedure to process every wildcard matching file
+ *  on a ftp transfer.
+ *
+ * Parameter:
+ *  transfer_info: a curl_fileinfo structure about the file.
+ *  curlData: A pointer to the curlData structure for the transfer.
+ *  remains: number of chunks remaining.
+ *-----------------------------------------------------------------------
+ */
+long
+curlChunkBgnProcInvoke (const void *transfer_info, void *curlDataPtr, int remains) {
+    struct curlObjData             *curlData=(struct curlObjData *)curlDataPtr;
+    Tcl_Obj                        *tclProcPtr;
+    char                            tclCommand[300];
+    int                             i;
+    const struct curl_fileinfo     *fileinfoPtr=(const struct curl_fileinfo *)transfer_info;
+
+    tclProcPtr=Tcl_NewStringObj(tclCommand,-1);
+
+    if (curlData->chunkBgnVar==NULL) {
+        curlData->chunkBgnVar=curlstrdup("fileData");
+    }
+
+    Tcl_SetVar2(curlData->interp,curlData->chunkBgnVar,"filename",
+            fileinfoPtr->filename,0);
+    
+    switch(fileinfoPtr->filetype) {
+        case 0:
+            Tcl_SetVar2(curlData->interp,curlData->chunkBgnVar,"filetype",
+                    "file",0);
+            break;
+        case 1:
+            Tcl_SetVar2(curlData->interp,curlData->chunkBgnVar,"filetype",
+                    "directory",0);
+            break;
+        case 2:
+            Tcl_SetVar2(curlData->interp,curlData->chunkBgnVar,"filetype",
+                    "symlink",0);
+            break;
+        case 3:
+            Tcl_SetVar2(curlData->interp,curlData->chunkBgnVar,"filetype",
+                    "device block",0);
+            break;
+        case 4:
+            Tcl_SetVar2(curlData->interp,curlData->chunkBgnVar,"filetype",
+                    "device char",0);
+            break;
+        case 5:
+            Tcl_SetVar2(curlData->interp,curlData->chunkBgnVar,"filetype",
+                    "named pipe",0);
+            break;
+        case 6:
+            Tcl_SetVar2(curlData->interp,curlData->chunkBgnVar,"filetype",
+                    "socket",0);
+            break;
+        case 7:
+            Tcl_SetVar2(curlData->interp,curlData->chunkBgnVar,"filetype",
+                    "door",0);
+            break;
+        case 8:
+            Tcl_SetVar2(curlData->interp,curlData->chunkBgnVar,"filetype",
+                    "error",0);
+            break;
+    }
+    
+    Tcl_SetVar2Ex(curlData->interp,curlData->chunkBgnVar,"time",
+            Tcl_NewLongObj(fileinfoPtr->time),0);    
+
+    Tcl_SetVar2Ex(curlData->interp,curlData->chunkBgnVar,"perm",
+            Tcl_NewIntObj(fileinfoPtr->perm),0);    
+
+    Tcl_SetVar2Ex(curlData->interp,curlData->chunkBgnVar,"uid",
+            Tcl_NewIntObj(fileinfoPtr->uid),0);    
+    Tcl_SetVar2Ex(curlData->interp,curlData->chunkBgnVar,"gid",
+            Tcl_NewIntObj(fileinfoPtr->gid),0);
+    Tcl_SetVar2Ex(curlData->interp,curlData->chunkBgnVar,"size",
+            Tcl_NewLongObj(fileinfoPtr->size),0);    
+    Tcl_SetVar2Ex(curlData->interp,curlData->chunkBgnVar,"hardlinks",
+            Tcl_NewIntObj(fileinfoPtr->hardlinks),0);
+    Tcl_SetVar2Ex(curlData->interp,curlData->chunkBgnVar,"flags",
+            Tcl_NewIntObj(fileinfoPtr->flags),0);
+
+    snprintf(tclCommand,300,"%s %d",curlData->chunkBgnProc,remains);
+    tclProcPtr=Tcl_NewStringObj(tclCommand,-1);
+
+    if (Tcl_EvalObjEx(curlData->interp,tclProcPtr,TCL_EVAL_GLOBAL)!=TCL_OK) {
+        return CURL_CHUNK_BGN_FUNC_FAIL;
+    }
+
+    if (Tcl_GetIntFromObj(curlData->interp,Tcl_GetObjResult(curlData->interp),&i)!=TCL_OK) {
+        return CURL_CHUNK_BGN_FUNC_FAIL;
+    }
+    switch(i) {
+        case 0:
+            return CURL_CHUNK_BGN_FUNC_OK;
+        case 1:
+            return CURL_CHUNK_BGN_FUNC_SKIP;
+    }
+    return CURL_CHUNK_BGN_FUNC_FAIL;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * curlChunkEndProcInvoke --
+ *
+ *  This is the function that will be invoked every time a file has
+ *  been downloaded or skipped, it does little more than called the
+ *  given proc.
+ *
+ * Parameter:
+ *  curlData: A pointer to the curlData structure for the transfer.
+ *
+ * Returns
+ *-----------------------------------------------------------------------
+ */
+long
+curlChunkEndProcInvoke (void *curlDataPtr) {
+
+    struct curlObjData      *curlData=(struct curlObjData *)curlDataPtr;
+    Tcl_Obj                 *tclProcPtr;
+    char                     tclCommand[300];
+    int                      i;
+
+    snprintf(tclCommand,300,"%s",curlData->chunkEndProc);
+    tclProcPtr=Tcl_NewStringObj(tclCommand,-1);
+
+    if (Tcl_EvalObjEx(curlData->interp,tclProcPtr,TCL_EVAL_GLOBAL)!=TCL_OK) {
+        return CURL_CHUNK_END_FUNC_FAIL;
+    }
+
+    if (Tcl_GetIntFromObj(curlData->interp,Tcl_GetObjResult(curlData->interp),&i)!=TCL_OK) {
+        return CURL_CHUNK_END_FUNC_FAIL;
+    }
+    if (i==1) {
+        return CURL_CHUNK_BGN_FUNC_FAIL;
+    }
+    return CURL_CHUNK_END_FUNC_OK;    
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * curlfnmatchProcInvoke --
+ *
+ *  This is the function that will be invoked to tell whether a filename
+ *  matches a pattern when doing a 'wildcard' download. It invokes a Tcl
+ *  proc to do the actual work.
+ *
+ * Parameter:
+ *  curlData: A pointer to the curlData structure for the transfer.
+ *  pattern: The pattern to match.
+ *  filename: The file name to be matched.
+ *-----------------------------------------------------------------------
+ */
+int curlfnmatchProcInvoke(void *curlDataPtr, const char *pattern, const char *filename) {
+
+    struct curlObjData      *curlData=(struct curlObjData *)curlDataPtr;
+    Tcl_Obj                 *tclProcPtr;
+    char                     tclCommand[500];
+    int                      i;
+
+    snprintf(tclCommand,500,"%s %s %s",curlData->fnmatchProc,pattern,filename);
+    tclProcPtr=Tcl_NewStringObj(tclCommand,-1);
+
+    if (Tcl_EvalObjEx(curlData->interp,tclProcPtr,TCL_EVAL_GLOBAL)!=TCL_OK) {
+        return CURL_FNMATCHFUNC_FAIL;
+    }
+
+    if (Tcl_GetIntFromObj(curlData->interp,Tcl_GetObjResult(curlData->interp),&i)!=TCL_OK) {
+        return CURL_FNMATCHFUNC_FAIL;
+    }
+    switch(i) {
+        case 0:
+            return CURL_FNMATCHFUNC_MATCH;
+        case 1:
+            return CURL_FNMATCHFUNC_NOMATCH;
+    }
+    return CURL_FNMATCHFUNC_FAIL;
 }
 
 /*
@@ -2512,7 +2918,7 @@ curlsshkeycallback(CURL *curl ,const struct curl_khkey *knownkey,
  */
 int
 curlDebugProcInvoke(CURL *curlHandle, curl_infotype infoType,
-        unsigned char * dataPtr, size_t size, void  *curlDataPtr) {
+        char * dataPtr, size_t size, void  *curlDataPtr) {
     struct curlObjData  *curlData=(struct curlObjData *)curlDataPtr;
     Tcl_Obj             *tclProcPtr;
     Tcl_Obj             *objv[3];
@@ -2523,7 +2929,7 @@ curlDebugProcInvoke(CURL *curlHandle, curl_infotype infoType,
 
     objv[0]=Tcl_NewStringObj(curlData->debugProc,-1);
     objv[1]=Tcl_NewIntObj(infoType);
-    objv[2]=Tcl_NewByteArrayObj(dataPtr,size);
+    objv[2]=Tcl_NewByteArrayObj((CONST unsigned char *)dataPtr,size);
 
     if (curlData->cancelTransVarName) {
         if (curlData->cancelTrans) {
@@ -2855,7 +3261,7 @@ curlGetInfo(Tcl_Interp *interp,CURL *curlHandle,int tableIndex) {
             Tcl_SetObjResult(interp,resultObjPtr);
             break;
         case 32:
-            exitCode=curl_easy_getinfo(curlHandle,CURLINFO_CERTINFO,&certinfoPtr);
+            exitCode=curl_easy_getinfo(curlHandle,CURLINFO_CERTINFO,certinfoPtr);
             if (exitCode) {
                 return exitCode;
             }
@@ -2874,6 +3280,32 @@ curlGetInfo(Tcl_Interp *interp,CURL *curlHandle,int tableIndex) {
         case 33:
             exitCode=curl_easy_getinfo                                  \
                     (curlHandle,CURLINFO_CONDITION_UNMET,&longNumber);
+            if (exitCode) {
+                return exitCode;
+            }
+            resultObjPtr=Tcl_NewLongObj(longNumber);
+            Tcl_SetObjResult(interp,resultObjPtr);
+            break;
+        case 34:
+            exitCode=curl_easy_getinfo                                  \
+                    (curlHandle,CURLINFO_PRIMARY_PORT,&longNumber);
+            if (exitCode) {
+                return exitCode;
+            }
+            resultObjPtr=Tcl_NewLongObj(longNumber);
+            Tcl_SetObjResult(interp,resultObjPtr);
+            break;
+        case 35:
+            exitCode=curl_easy_getinfo(curlHandle,CURLINFO_LOCAL_IP,&charPtr);
+            if (exitCode) {
+                return exitCode;
+            }
+            resultObjPtr=Tcl_NewStringObj(charPtr,-1);
+            Tcl_SetObjResult(interp,resultObjPtr);
+            break;
+        case 36:
+            exitCode=curl_easy_getinfo                                  \
+                    (curlHandle,CURLINFO_LOCAL_PORT,&longNumber);
             if (exitCode) {
                 return exitCode;
             }
@@ -2932,6 +3364,14 @@ curlFreeSpace(struct curlObjData *curlData) {
     Tcl_Free(curlData->debugProc);
     curl_slist_free_all(curlData->http200aliases);
     Tcl_Free(curlData->sshkeycallProc);
+    curl_slist_free_all(curlData->mailrcpt);
+    Tcl_Free(curlData->chunkBgnProc);
+    Tcl_Free(curlData->chunkBgnVar);
+    Tcl_Free(curlData->chunkEndProc);
+    Tcl_Free(curlData->fnmatchProc);
+    curl_slist_free_all(curlData->resolve);
+    curl_slist_free_all(curlData->telnetoptions);
+
     Tcl_Free(curlData->command);
 }
 
@@ -3325,6 +3765,9 @@ curlCopyCurlData (struct curlObjData *curlDataOld,
     curlDataNew->stderrHandle=NULL;
     curlDataNew->stderrFlag=0;
     curlDataNew->http200aliases=NULL;
+    curlDataNew->mailrcpt=NULL;
+    curlDataNew->resolve=NULL;
+    curlDataNew->telnetoptions=NULL;
 
     /* The strings need a special treatment. */
 
@@ -3346,7 +3789,11 @@ curlCopyCurlData (struct curlObjData *curlDataOld,
     curlDataNew->debugProc=curlstrdup(curlDataOld->debugProc);
     curlDataNew->command=curlstrdup(curlDataOld->command);
     curlDataNew->sshkeycallProc=curlstrdup(curlDataOld->sshkeycallProc);
-
+    curlDataNew->chunkBgnProc=curlstrdup(curlDataOld->chunkBgnProc);
+    curlDataNew->chunkBgnVar=curlstrdup(curlDataOld->chunkBgnVar);
+    curlDataNew->chunkEndProc=curlstrdup(curlDataOld->chunkEndProc);
+    curlDataNew->fnmatchProc=curlstrdup(curlDataOld->fnmatchProc);
+    
     curlDataNew->bodyVar.memory=(char *)Tcl_Alloc(curlDataOld->bodyVar.size);
     memcpy(curlDataNew->bodyVar.memory,curlDataOld->bodyVar.memory
             ,curlDataOld->bodyVar.size);
@@ -3494,12 +3941,12 @@ curlOpenFile(Tcl_Interp *interp,char *fileName, FILE **handle, int writing, int 
  *----------------------------------------------------------------------
  */
 
-static curlioerr curlseek(void *instream, curl_off_t offset, int origin)
+int
+curlseek(void *instream, curl_off_t offset, int origin)
 {
     if(-1 == fseek((FILE *)instream, 0, origin)) {
           return CURLIOE_FAILRESTART;
     }
-
     return CURLIOE_OK;
 }
 
@@ -3622,10 +4069,9 @@ curlSetBodyVarName(Tcl_Interp *interp,struct curlObjData *curlDataPtr) {
 
     Tcl_ObjSetVar2(interp,bodyVarNameObjPtr,(Tcl_Obj *)NULL,bodyVarObjPtr,0);
 
+    Tcl_Free(curlDataPtr->bodyVar.memory);
+    curlDataPtr->bodyVar.memory=NULL;
     curlDataPtr->bodyVar.size=0;
-
-    Tcl_Free(curlDataPtr->bodyVarName);
-    curlDataPtr->bodyVarName=NULL;
 }
 
 /*----------------------------------------------------------------------
