@@ -4,7 +4,7 @@ Priority: extra
 Maintainer: Sven Hoexter <hoexter@debian.org>
 Build-Depends: debhelper (>= 9), tcl-dev, libcurl4-gnutls-dev (>= 7.22.0),
  quilt, bc
-Homepage: http://personal.iddeo.es/andresgarci/tclcurl/english/index.html
+Homepage: http://personal.telefonica.terra.es/web/getleft/tclcurl/index.html
 Standards-Version: 3.9.3
 Vcs-Git: git://git.sven.stormbind.net/git/sven/tclcurl.git
 Vcs-Browser: http://git.sven.stormbind.net/?p=sven/tclcurl.git
