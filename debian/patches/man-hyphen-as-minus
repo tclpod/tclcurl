@@ -1,7 +1,7 @@
 Fix several hyphen-as-minus problems flagged by lintian.
 --- a/doc/tclcurl.n
 +++ b/doc/tclcurl.n
-@@ -294,7 +294,7 @@ too low might cause unnecessary connecti
+@@ -460,7 +460,7 @@ too low might cause unnecessary connecti
  .TP
  .B -dnscachetimeout
  Pass the timeout in seconds. Name resolves will be kept in memory for this number
@@ -9,8 +9,8 @@ Fix several hyphen-as-minus problems flagged by lintian.
 +of seconds. Set to '0' to completely disable caching, or '\-1' to make the
  cached entries remain forever. By default, TclCurl caches this info for 60 seconds.
  
- .TP
-@@ -498,7 +498,7 @@ is  meaningful  only  when setting \fB-f
+ The name resolve functions of various libc implementations don't re-read name
+@@ -761,7 +761,7 @@ is  meaningful  only  when setting \fB-f
  Sets the redirection limit. If that many redirections have been followed,
  the next redirect will cause an error. This option only makes sense if the
  \fB-followlocation\fP option is used at the same time. Setting the limit
@@ -19,7 +19,7 @@ Fix several hyphen-as-minus problems flagged by lintian.
  number of redirects (which is the default)
  
  .TP
-@@ -1026,7 +1026,7 @@ Pass the offset in number of bytes that
+@@ -1341,7 +1341,7 @@ Pass the offset in number of bytes that
  Set this option to 0 to make the transfer start from the beginning
  (effectively disabling resume).
  
@@ -27,17 +27,17 @@ Fix several hyphen-as-minus problems flagged by lintian.
 +For FTP, set this option to \-1 to make the transfer start from the end of the
  target file (useful to continue an interrupted upload). 
  
- .TP
-@@ -1626,7 +1626,7 @@ Internal error. A function was called wi
+ When doing uploads with FTP, the resume position is where in the local/source
+@@ -2077,7 +2077,7 @@ Internal error. A function was called wi
  Interface error. A specified outgoing interface could not be used.
  .IP 47
  Too many redirects. When following redirects, TclCurl hit the maximum amount, set
 -your limit with --maxredirs
 +your limit with \-\-maxredirs
  .IP 48
- Unknown TELNET option specified.
- .IP 49
-@@ -1720,7 +1720,7 @@ Returns the last received proxy response
+ An option passed to TclCurl is not recognized/known. Refer to the appropriate
+ documentation. This is most likely a problem in the program that uses
+@@ -2186,7 +2186,7 @@ Returns the last received proxy response
  .TP
  .B filetime
  Returns the remote time of the retrieved document (in number of seconds
@@ -46,7 +46,7 @@ Fix several hyphen-as-minus problems flagged by lintian.
  it can be because of many reasons (unknown, the server hides it or the
  server doesn't support the command that tells document time etc) and the time
  of the document is unknown.
-@@ -1824,7 +1824,7 @@ requests. Note that this may be more tha
+@@ -2303,7 +2303,7 @@ requests. Note that this may be more tha
  .TP
  .B sslverifyresult
  Returns the result of the certification verification that was requested
@@ -57,7 +57,7 @@ Fix several hyphen-as-minus problems flagged by lintian.
  .B sslengines
 --- a/doc/tclcurl_multi.n
 +++ b/doc/tclcurl_multi.n
-@@ -174,7 +174,7 @@ you can use the
+@@ -186,7 +186,7 @@ you can use the
  command, it will return the number of transfers currently active.
  .sp
  .B RETURN VALUE

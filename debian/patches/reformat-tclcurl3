@@ -1,7 +1,7 @@
 Fix some formating errors in the manpages.
 --- a/doc/tclcurl.n
 +++ b/doc/tclcurl.n
-@@ -687,10 +687,10 @@ response will be treated as a valid HTTP
+@@ -961,10 +961,10 @@ response will be treated as a valid HTTP
  
  .TP
  .B -cookie
@@ -16,7 +16,7 @@ Fix some formating errors in the manpages.
  
  If  you  need  to  set mulitple cookies, you need to set them all using
  a single option and thus you need to concatenate them all in one single string.
-@@ -1384,7 +1384,7 @@ are also acceptable separators but colon
+@@ -1771,7 +1771,7 @@ are also acceptable separators but colon
  used as operators. 
  
  For OpenSSL and GnuTLS valid examples of cipher lists include 'RC4-SHA', 'SHA1+DES',
@@ -25,7 +25,7 @@ Fix some formating errors in the manpages.
  
  You will find more details about cipher lists on this URL:
      http://www.openssl.org/docs/apps/ciphers.html
-@@ -1530,7 +1530,7 @@ same handle. Let it return first before 
+@@ -1976,7 +1976,7 @@ same handle. Let it return first before
  you want parallel transfers, you must use several curl handles.
  .TP
  .B RETURN VALUE

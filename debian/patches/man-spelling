@@ -1,7 +1,7 @@
 Fix a few spelling issue flagged by lintian.
 --- a/doc/tclcurl.n
 +++ b/doc/tclcurl.n
-@@ -50,7 +50,7 @@ curl and this call MUST have a correspon
+@@ -52,7 +52,7 @@ curl and this call MUST have a correspon
  .I cleanup
  when the operation is completed.
  You should perform all your sequential file transfers using the same
@@ -10,7 +10,7 @@ Fix a few spelling issue flagged by lintian.
  possible.
  .sp
  .B RETURN VALUE
-@@ -308,7 +308,7 @@ to using the share interface instead! Se
+@@ -479,7 +479,7 @@ to using the share interface instead! Se
  
  .TP
  .B -buffersize
@@ -19,7 +19,7 @@ Fix a few spelling issue flagged by lintian.
  would be that the write callback gets called more often and with smaller chunks.
  This is just treated as a request, not an order. You cannot be guaranteed to
  actually get the given size.
-@@ -437,7 +437,7 @@ TclCurl will automatically select the on
+@@ -657,7 +657,7 @@ TclCurl will automatically select the on
  
  .TP
  .B anysafe
@@ -28,16 +28,16 @@ Fix a few spelling issue flagged by lintian.
  one it finds most secure.
  .RE
  
-@@ -697,7 +697,7 @@ a single option and thus you need to con
+@@ -971,7 +971,7 @@ a single option and thus you need to con
  Set multiple cookies in one string like this: "name1=content1; name2=content2;"
  etc.
  
--Note that this option sets the cookie header explictly in the outgoing request(s).
-+Note that this option sets the cookie header explicitly in the outgoing request(s).
+-This option sets the cookie header explictly in the outgoing request(s).
++This option sets the cookie header explicitly in the outgoing request(s).
  If multiple requests are done due to authentication, followed redirections or similar,
  they will all get this cookie passed on.
  
-@@ -1148,7 +1148,7 @@ than or equal to the parameter value. De
+@@ -1467,7 +1467,7 @@ than or equal to the parameter value. De
  
  .TP
  .B -maxconnects
@@ -46,7 +46,7 @@ Fix a few spelling issue flagged by lintian.
  persistent conecctions. The set amount will be the maximum amount of simultaneous
  connections that TclCurl may cache in this easy handle. Default is 5, and there
  isn't much point in changing this value unless you are perfectly aware of how this
-@@ -1916,7 +1916,7 @@ to pause the transfer.
+@@ -2412,7 +2412,7 @@ to pause the transfer.
  Resumes a transfer paused with \fBcurlhandle pause\fP
  
  .SH curl::transfer

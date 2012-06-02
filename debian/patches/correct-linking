@@ -3,7 +3,7 @@ for this package.
 See: http://lists.debian.org/debian-devel-announce/2006/09/msg00018.html
 --- a/configure
 +++ b/configure
-@@ -7290,7 +7290,16 @@ fi
+@@ -4939,7 +4939,16 @@ fi
  $as_echo "yes" >&6; }
  
  
