@@ -2,7 +2,7 @@ Source: tclcurl
 Section: interpreters
 Priority: extra
 Maintainer: Sven Hoexter <hoexter@debian.org>
-Build-Depends: debhelper (>= 8), tcl-dev, libcurl4-gnutls-dev (>= 7.19.6),
+Build-Depends: debhelper (>= 8), tcl-dev, libcurl4-gnutls-dev (>= 7.22.0),
  quilt, bc
 Homepage: http://personal.iddeo.es/andresgarci/tclcurl/english/index.html
 Standards-Version: 3.9.2
