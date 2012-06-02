@@ -1,9 +1,10 @@
 .\" You can view this file with:
 .\" nroff -man [file]
 .\" Adapted from libcurl docs by fandom@telefonica.net
-.TH TclCurl n "8 September 2008" "TclCurl 7.19.0" "TclCurl share data api"
+.TH TclCurl n "3 October 2011" "TclCurl 7.22.0 "TclCurl Easy Interface"
 .SH NAME
-TclCurl: - get  a  URL with FTP, FTPS, HTTP, HTTPS, SCP, SFTP, TFTP, TELNET, DICT, FILE or LDAP syntax.
+TclCurl: - get  a  URL with FTP, FTPS, HTTP, HTTPS, SCP, SFTP, TFTP, TELNET, DICT, FILE, LDAP,
+LDAPS, IMAP, IMAPS, POP, POP3, SMTP, SMTPS and gopher syntax.
 .SH SYNOPSIS
 .BI "curl::shareinit"
 .sp

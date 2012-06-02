@@ -24,7 +24,7 @@ if it isn't add it before installing cURL.
 If the configure script doesn't detect Tcl even though it is there, it
 is probably because there is no 'tclConfig.sh' file, maybe you need
 to install a 'tcl-devel' package or maybe it would be a good idea
-to download Tcl/Tk 8.4.5, the latest version, and install that.
+to download the latest version, and install that.
 
 Usage:
 

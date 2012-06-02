@@ -6,13 +6,13 @@
 ## Includes the tcl part of TclCurl
 ################################################################################
 ################################################################################
-## (c) 2001-2009 Andres Garcia Garcia. fandom@telefonica.net
+## (c) 2001-2011 Andres Garcia Garcia. fandom@telefonica.net
 ## See the file "license.terms" for information on usage and redistribution
 ## of this file and for a DISCLAIMER OF ALL WARRANTIES.
 ################################################################################
 ################################################################################
 
-package provide TclCurl 7.19.6
+package provide TclCurl 7.22.0
 
 namespace eval curl {
 
@@ -67,6 +67,11 @@ proc ::curl::transfer {args} {
     set i 0
     set newArgs ""
     catch {unset getInfo}
+
+    if {[llength $args]==0} {
+        puts "No transfer configured"
+        return
+    }
 
     foreach {option value} $args {
         set noPassOption 0

@@ -19,7 +19,7 @@ dnl	to configure the system for the local environment.
 # so you can encode the package version directly into the source files.
 #-----------------------------------------------------------------------
 
-AC_INIT([TclCurl], [7.19.6])
+AC_INIT([TclCurl], [7.22.0])
 
 #--------------------------------------------------------------------
 # Call TEA_INIT as the first TEA_ macro to set up initial vars.
@@ -127,7 +127,7 @@ AC_ARG_WITH(libcurl,
  ])
 
 AC_MSG_CHECKING([if libcurl version is recent enough])
-CURL_VERSION=`$curlpath/curl-config --checkfor 7.19.6`
+CURL_VERSION=`$curlpath/curl-config --checkfor 7.21.7`
 if test "${CURL_VERSION}" != "" ; then
     echo ${CURL_VERSION}
     AC_MSG_ERROR([libcurl version too old, please upgrade])

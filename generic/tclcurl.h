@@ -4,7 +4,7 @@
  * Header file for the TclCurl extension to enable Tcl interpreters
  * to access libcurl.
  *
- * Copyright (c) 2001-2009 Andres Garcia Garcia.
+ * Copyright (c) 2001-2011 Andres Garcia Garcia.
  *
  * See the file "license.terms" for information on usage and redistribution
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
@@ -16,7 +16,6 @@
 #endif
 
 #include <curl/curl.h>
-#include <curl/types.h>
 #include <curl/easy.h>
 #include <tcl.h>
 #include <tclDecls.h>
@@ -42,7 +41,7 @@ extern "C" {
 #define TCL_STORAGE_CLASS DLLEXPORT
 #endif
 
-#define TclCurlVersion "7.19.6"
+#define TclCurlVersion "7.22.0"
 
 /*
  * This struct will contain the data of a transfer if the user wants
@@ -106,6 +105,13 @@ struct curlObjData {
     char                   *command;
     int                     anyAuthFlag;
     char                   *sshkeycallProc;
+    struct curl_slist      *mailrcpt;
+    char                   *chunkBgnProc;
+    char                   *chunkBgnVar;
+    char                   *chunkEndProc;
+    char                   *fnmatchProc;
+    struct curl_slist      *resolve;
+    struct curl_slist      *telnetoptions;
 };
 
 struct shcurlObjData {
@@ -129,7 +135,7 @@ CONST static char *commandTable[] = {
 };
 
 CONST static char *optionTable[] = {
-    "CURLOPT_URL",           "CURLOPT_FILE",            "CURLOPT_INFILE",
+    "CURLOPT_URL",           "CURLOPT_FILE",            "CURLOPT_READDATA",
     "CURLOPT_USERAGENT",     "CURLOPT_REFERER",         "CURLOPT_VERBOSE",
     "CURLOPT_HEADER",        "CURLOPT_NOBODY",          "CURLOPT_PROXY",
     "CURLOPT_PROXYPORT",     "CURLOPT_HTTPPROXYTUNNEL", "CURLOPT_FAILONERROR",
@@ -186,7 +192,12 @@ CONST static char *optionTable[] = {
     "CURLOPT_PROXYUSERNAME",  "CURLOPT_PROXYPASSWORD",  "CURLOPT_TFTP_BLKSIZE",
     "CURLOPT_SOCKS5_GSSAPI_SERVICE",                    "CURLOPT_SOCKS5_GSSAPI_NEC",
     "CURLOPT_PROTOCOLS",      "CURLOPT_REDIR_PROTOCOLS","CURLOPT_FTP_SSL_CC",
-    "CURLOPT_SSH_KNOWNHOSTS", "CURLOPT_SSH_KEYFUNCTION",
+    "CURLOPT_SSH_KNOWNHOSTS", "CURLOPT_SSH_KEYFUNCTION","CURLOPT_MAIL_FROM",
+    "CURLOPT_MAIL_RCPT",      "CURLOPT_FTP_USE_PRET",   "CURLOPT_WILDCARDMATCH",
+    "CURLOPT_CHUNK_BGN_PROC", "CURLOPT_CHUNK_BGN_VAR",  "CURLOPT_CHUNK_END_PROC",
+    "CURLOPT_FNMATCH_PROC",   "CURLOPT_RESOLVE",        "CURLOPT_TLSAUTH_USERNAME",
+    "CURLOPT_TLSAUTH_PASSWORD","CURLOPT_GSSAPI_DELEGATION", "CURLOPT_NOPROXY",
+    "CURLOPT_TELNETOPTIONS",
     (char *)NULL
 };
 
@@ -246,7 +257,12 @@ CONST static char *configTable[] = {
     "-password",          "-proxyuser",          "-proxypassword",
     "-tftpblksize",       "-socks5gssapiservice","-socks5gssapinec",
     "-protocols",         "-redirprotocols",     "-ftpsslcc",
-    "-sshknownhosts",     "-sshkeyproc",
+    "-sshknownhosts",     "-sshkeyproc",         "-mailfrom",
+    "-mailrcpt",          "-ftpusepret",         "-wildcardmatch",
+    "-chunkbgnproc",      "-chunkbgnvar",        "-chunkendproc",
+    "-fnmatchproc",       "-resolve",            "-tlsauthusername",
+    "-tlsauthpassword",   "-gssapidelegation",   "-noproxy",
+    "-telnetoptions",
     (char *) NULL
 };
 
@@ -268,6 +284,7 @@ CONST static char    *getInfoTable[]={
     "sslengines",     "httpconnectcode","cookielist",
     "ftpentrypath",   "redirecturl",    "primaryip",
     "appconnecttime", "certinfo",       "conditionunmet",
+    "primaryport",    "localip",        "localport",
     (char *)NULL
 };
 
@@ -295,11 +312,11 @@ CONST static char *versionInfoTable[] = {
 };
 
 CONST static char *proxyTypeTable[] = {
-    "http", "socks4", "socks4a", "socks5", "socks5hostname", (char *)NULL
+    "http", "http1.0", "socks4", "socks4a", "socks5", "socks5h", (char *)NULL
 };
 
 CONST static char *httpAuthMethods[] = {
-    "basic", "digest", "digestie", "gssnegotiate", "ntlm", "any", "anysafe", (char *)NULL
+    "basic", "digest", "digestie", "gssnegotiate", "ntlm", "any", "anysafe", "ntlmwb",(char *)NULL
 };
 
 CONST static char *ipresolve[] = {
@@ -344,10 +361,20 @@ CONST static char *postredir[] = {
 
 CONST static char *protocolNames[] = {
     "http", "https", "ftp", "ftps", "scp", "sftp", "telnet", "ldap",
-    "ldaps","dict",  "file","tftp", "all", (char*)NULL
+    "ldaps","dict",  "file","tftp", "all", "imap", "imaps", "pop3",
+    "pop3s", "smtp", "smtps", "rtsp", "rtmp", "rtmpt", "rtmpe", 
+    "rtmpte", "rtmps", "rtmpts", "gopher", (char*)NULL
 };
 
-static curlioerr curlseek(void *instream, curl_off_t offset, int origin);
+CONST static char *tlsauth[] = {
+    "none", "srp", (char *)NULL
+};
+
+CONST static char *gssapidelegation[] = {
+    "flag", "policyflag", (char *) NULL
+};
+
+int curlseek(void *instream, curl_off_t offset, int origin);
 
 int Tclcurl_MultiInit (Tcl_Interp *interp);
 
@@ -407,6 +434,9 @@ int curlProgressCallback(void *clientp,double dltotal,double dlnow,
 size_t curlWriteProcInvoke(void *ptr,size_t size,size_t nmemb,FILE *curlDataPtr);
 size_t curlReadProcInvoke(void *ptr,size_t size,size_t nmemb,FILE *curlDataPtr);
 
+long curlChunkBgnProcInvoke (const void *transfer_info, void *curlDataPtr, int remains);
+long curlChunkEndProcInvoke (void *curlDataPtr);
+int curlfnmatchProcInvoke(void *curlDataPtr, const char *pattern, const char *filename);
 
 /* Puts a ssh key into a Tcl object */
 Tcl_Obj *curlsshkeyextract(Tcl_Interp *interp,const struct curl_khkey *key);
@@ -420,7 +450,7 @@ size_t curlsshkeycallback(CURL *easy,                        /* easy handle */
                           void *curlData);
 
 int curlDebugProcInvoke(CURL *curlHandle, curl_infotype infoType,
-        unsigned char * dataPtr, size_t size, void  *curlData);
+        char * dataPtr, size_t size, void  *curlData);
 
 int curlVersion (ClientData clientData, Tcl_Interp *interp,
     int objc,Tcl_Obj *CONST objv[]);

@@ -1,12 +1,13 @@
 <HTML><HEAD><TITLE>Manpage of TclCurl</TITLE>
 </HEAD><BODY>
 <H1>TclCurl</H1>
-Section: Easy inteface (n)<BR>Updated: 8 September 2008<BR>
+Section: Easy inteface (n)<BR>Updated: 03 October 2011<BR>
 <A NAME="lbAB">&nbsp;</A>
 <hr>
 <H2>NAME</H2>
 
-TclCurl: - get  a  URL with FTP, FTPS, HTTP, HTTPS, SCP, SFTP, TFTP, TELNET, DICT, FILE or LDAP syntax.
+TclCurl: - get  a  URL with FTP, FTPS, HTTP, HTTPS, SCP, SFTP, TFTP, TELNET, DICT, FILE, LDAP,
+LDAPS, IMAP, IMAPS, POP, POP3, SMTP, SMTPS and gopher syntax.
 <A NAME="lbAC">&nbsp;</A>
 <H2>SYNOPSIS</H2>
 
@@ -61,10 +62,9 @@ TclCurl: - get  a  URL with FTP, FTPS, HTTP, HTTPS, SCP, SFTP, TFTP, TELNET, DIC
 <A NAME="lbAD">&nbsp;</A>
 <H2>DESCRIPTION</H2>
 
-The TclCurl extension gives Tcl programmers access to the libcurl
-library written by <a href="http://daniel.haxx.se">Daniel Stenberg</a>, with it you can download urls,
-upload them and many other neat tricks, for more information check
-<A HREF="http://curl.haxx.se">cURL's web page</A>
+The TclCurl extension gives Tcl programmers access to the <a href="http://curl.haxx.se/libcurl/">libcurl</a>
+library written by <a href="http://daniel.haxx.se/">Daniel Stenberg</a>, with it you can download urls,
+upload them and many other neat tricks.
 
 <A NAME="lbAE">&nbsp;</A>
 <H2>curl::init</H2>
@@ -147,8 +147,8 @@ only relevant for protocols that actually have headers preceding the data (like 
 <DT><B>-noprogress</B>
 
 <DD>
-A 1 tells the extension to turn on the built-in progress meter.
-Nowadays it is turn off by default.
+A 1 tells the extension to turn on the progress meter
+completely. It will also prevent the <I>progessproc</I> from getting called.
 <P>
 <DT><B>-nosignal</B>
 
@@ -158,8 +158,81 @@ handlers or any functions that cause signals to be sent to the process. This
 option is mainly here to allow multi-threaded unix applications to still
 set/use all timeout options etc, without risking getting signals.
 <P>
+If this option is set and libcurl has been built with the standard name resolver,
+timeouts will not occur while the name resolve takes place. Consider building
+libcurl with c-ares support to enable asynchronous DNS lookups, which enables
+nice timeouts for name resolves without signals. 
 <P>
+Setting <I>nosignal</I> to 1 makes libcurl NOT ask the system to ignore
+SIGPIPE signals, which otherwise are sent by the system when trying to send
+data to a socket which is closed in the other end. libcurl makes an effort to
+never cause such SIGPIPEs to trigger, but some operating systems have no way
+to avoid them and even on those that have there are some corner cases when
+they may still happen, contrary to our desire. In addition, using
+<I>ntlm_Wb</I> authentication could cause a SIGCHLD signal to be raised.
+<P>
+<DT><B>-wildcard</B>
+
+<DD>
+Set this option to 1 if you want to transfer multiple files according to a
+file name pattern. The pattern can be specified as part of the
+<B>-url</B> option, using an fnmatch-like pattern (Shell Pattern
+Matching) in the last part of URL (file name).
+<P>
+By default, TClCurl uses its internal wildcard matching implementation. You
+can provide your own matching function by the <B>-fnmatchproc</B> option.
+<P>
+This feature is only supported by the FTP download for now.
+<P>
+A brief introduction of its syntax follows:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>* - ASTERISK<DD>
+ftp://example.com/some/path/*.txt (for all txt's from the root directory)
 </DL>
+</DL>
+
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>? - QUESTION MARK<DD>
+Question mark matches any (exactly one) character.
+<P>
+ftp://example.com/some/path/photo?.jpeg
+</DL>
+</DL>
+
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>[ - BRACKET EXPRESSION<DD>
+The left bracket opens a bracket expression. The question mark and asterisk have
+no special meaning in a bracket expression. Each bracket expression ends by the
+right bracket and matches exactly one character. Some examples follow:
+<P>
+<B>[a-zA-Z0-9]</B> or <B>[f-gF-G]</B> - character interval
+<P>
+<B>[abc]</B> - character enumeration
+<P>
+<B>[^abc]</B> or <B>[!abc]</B> - negation
+<P>
+<B>[[:</B><I>name</I><B>:]]</B> class expression. Supported classes are
+<B>alnum</B>,<B>lower</B>, <B>space</B>, <B>alpha</B>, <B>digit</B>, <B>print</B>,
+<B>upper</B>, <B>blank</B>, <B>graph</B>, <B>xdigit</B>.
+<P>
+<B>[][-!^]</B> - special case - matches only '-', ']', '[', '!' or '^'. These
+characters have no special purpose.
+<P>
+<B>[\[\]\\]</B> - escape syntax. Matches '[', ']' or '\'.
+<P>
+Using the rules above, a file name pattern can be constructed:
+<P>
+ftp://example.com/some/path/[a-z[:upper:]\\].jpeg
+</DL>
+</DL>
+
+</DL>
+<P>
+
+<P>
 <A NAME="lbAH">&nbsp;</A>
 <H2>Callback options</H2>
 
@@ -190,6 +263,15 @@ parameter, which will contain the maximun numbers of bytes to read. It
 should return the actual number of bytes read, or '0' if you want to
 stop the transfer.
 <P>
+If you stop the current transfer by returning 0 &quot;pre-maturely&quot; (i.e before
+the server expected it, like when you've said you will upload N bytes and
+you upload less than N bytes), you may experience that the server &quot;hangs&quot;
+waiting for the rest of the data that won't come. 
+<P>
+Bugs: when doing TFTP uploads, you must return the exact amount of data
+that the callback wants, or it will be considered the final packet by the
+server end and the transfer will end there. 
+<P>
 <DT><B>-infile</B>
 
 <DD>
@@ -199,7 +281,7 @@ File from which the data will be transfered.
 
 <DD>
 Name of the Tcl procedure that will invoked by TclCurl  with a frequent
-interval during operation (roughly once per second), no matter if data
+interval during operation (roughly once per second or sooner), no matter if data
 is being transfered or not.  Unknown/unused
 argument values passed to the callback will be set to zero (like if you
 only download data, the upload size will remain 0), the prototype of the
@@ -227,6 +309,8 @@ The headers are guaranteed to be written one-by-one to this file and
 only complete lines are written. Parsing headers should be easy enough using
 this.
 <P>
+See also the headervar option to get the headers into an array.
+<P>
 <DT><B>-debugproc</B>
 
 <DD>
@@ -241,6 +325,52 @@ option, it should match the following prototype:
 where <B>infoType</B> specifies what kind of information it is (0 text,
 1 incoming header, 2 outgoing header, 3 incoming data, 4 outgoing data,
 5 incoming SSL data, 6 outgoing SSL data).
+<P>
+<DT><B>-chunkbgnproc</B>
+
+<DD>
+Name of the procedure that will be called before a file will be transfered by
+ftp, it should match the following prototype:
+<P>
+<B>ChunkBgnProc {remains}</B>
+
+<P>
+<P>
+Where remains is the number of files left to be transfered (or skipped)
+<P>
+This callback makes sense only when using the <B>-wildcard</B> option.
+<P>
+<DT><B>-chunkbgnvar</B>
+
+<DD>
+Name of the variable in the global scope that will contain the data of the file about
+to be transfered. If you don't use this option '::fileData' will be used.
+<P>
+The available data is: filename, filetype (file, directory, symlink, device block, device char,
+named pipe, socket, door or error if it couldn't be identified), time, perm, uid, gid, 
+size, hardlinks and flags.
+<P>
+<DT><B>-chunkendproc</B>
+
+<DD>
+Name of the procedure that will be called after a file is transfered (or skipped) 
+by ftp, it should match the following prototype:
+<P>
+<B>ChunkEndProc {}</B>
+
+<P>
+It should return '0' if everyhting is fine and '1' if some error occurred.
+<P>
+<DT><B>-fnmatchProc</B>
+
+<DD>
+Name of the procedure that will be called instead of the internal wildcard
+matching function, it should match the following prototype:
+<P>
+<B>FnMatchProc {pattern string}</B>
+
+<P>
+Returns '0' if it matches, '1' if it doesn't.
 <P>
 </DL>
 <A NAME="lbAI">&nbsp;</A>
@@ -290,13 +420,33 @@ If the given URL lacks the protocol part (&quot;http://&quot; or &quot;ftp://&qu
 attempt to guess which protocol to use based on the given host name. If the
 given protocol of the set URL is not supported, TclCurl will return the
 <B>unsupported protocol</B> error when you call <B>perform</B>. Use
-<B>curl::versioninfo</B> for detailed info on which protocols that are supported.
+<B>curl::versioninfo</B> for detailed info on which protocols are supported.
 <P>
-<B>NOTE</B>: this the one option required to be set
-before
-<B>perform</B>
+Starting with version 7.22.0, the fragment part of the URI will not be send as
+part of the path, which was the case previously.
+<P>
+<B>NOTE</B>: this is the one option required to be set before <B>perform</B> is called.
+<P>
+<DT><B>-protocols</B>
 
-is called.
+<DD>
+Pass a list in lowecase of protocols to limit what protocols TclCurl may use in the transfer. This
+allows you to have a TclCurl built to support a wide range of protocols but still limit
+specific transfers to only be allowed to use a subset of them. 
+<P>
+Accepted protocols are 'http', 'https', 'ftp', 'ftps', 'scp', 'sftp', 'telnet', 'ldap',
+
+and 'all'.
+<P>
+<DT><B>-redirprotocols</B>
+
+<DD>
+Pass a list in lowercase of accepted protocols to limit what protocols TclCurl may use in a transfer
+that it follows to in a redirect when <B>-followlocation</B> is enabled. This allows you
+to limit specific transfers to only be allowed to use a subset of protocols in redirections.
+<P>
+By default TclCurl will allow all protocols except for FILE and SCP. This is a difference
+compared to pre-7.19.4 versions which unconditionally would follow to all protocols supported.
 <P>
 <DT><B>-proxy</B>
 
@@ -328,17 +478,41 @@ The proxy host string can be specified the exact same way as the proxy
 environment variables, include protocol prefix (<A HREF="http://)">http://)</A> and embedded
 user + password.
 <P>
+Since 7.22.0, the proxy string may be specified with a protocol:// prefix to
+specify alternative proxy protocols. Use socks4://, socks4a://, socks5:// or
+socks5h:// (the last one to enable socks5 and asking the proxy to do the resolving)
+to request the specific SOCKS version
+to be used. No protocol specified, http:// and all others will be treated as
+HTTP proxies.
+<P>
 <DT><B>-proxyport</B>
 
 <DD>
 Use this option to set the proxy port to use unless it is specified in
-the proxy string by <B>-proxy</B>.
+the proxy string by <B>-proxy</B>. If not specified, TclCurl will default
+-to using port 1080 for proxies.
 <P>
 <DT><B>-proxytype</B>
 
 <DD>
-Pass the type of  the  proxy. Available options are 'http', 'socks4', 'socks4a'
-and 'socks5', with the HTTP one being default.
+Pass the type of  the  proxy. Available options are 'http', 'http1.0', 'socks4', 'socks4a',
+<BLOCKQUOTE>man2html: unable to open or read file
+
+</BLOCKQUOTE>
+
+<P>
+If you set it to <I>http1.0</I>, it will only affect how libcurl speaks to a proxy
+when CONNECT is used. The HTTP version used for &quot;regular&quot; HTTP requests is instead
+controled with <I>httpversion</I>.
+<P>
+<DT><B>-noproxy</B>
+
+<DD>
+Pass a string, a comma-separated list of hosts which do not use a proxy, if one
+is specified. The only wildcard is a single * character, which matches all hosts,
+and effectively disables the proxy. Each name in this list is matched as either
+a domain which contains the hostname, or the hostname itself. For example, local.com
+would match local.com, local.com:80, and www.local.com, but not http://www.notlocal.com.
 <P>
 <DT><B>-httpproxytunnel</B>
 
@@ -347,7 +521,20 @@ Set the parameter to 1 to get the extension to tunnel all non-HTTP
 operations through the given HTTP proxy. Do note that there is a big
 difference between using a proxy and tunneling through it. If you don't know what
 this means, you probably don't want this tunnel option.
+<P>
+<DT><B>-socks5gssapiservice</B>
 
+<DD>
+Pass thee name of the service. The default service name for a SOCKS5 server is
+rcmd/server-fqdn. This option allows you to change it.
+<P>
+<DT><B>-socks5gssapinec</B>
+
+<DD>
+Pass a 1 to enable or 0 to disable. As part of the gssapi negotiation a protection
+mode is negotiated. The rfc1961 says in section 4.3/4.4 it should be protected, but
+the NEC reference implementation does not. If enabled, this option allows the
+unprotected exchange of the protection mode negotiation.
 <P>
 <DT><B>-interface</B>
 
@@ -361,7 +548,7 @@ name.
 <DD>
 This sets the local port number of the socket used for connection. This can
 be used in combination with <B>-interface</B> and you are recommended to use
-<B>localportrange</B> as well when this is set. Note the only valid port numbers
+<B>localportrange</B> as well when this is set. Valid port numbers
 are 1 - 65535.
 <P>
 <DT><B>-localportrange</B>
@@ -370,7 +557,7 @@ are 1 - 65535.
 This is the number of attempts TclCurl should do to find a working local port
 number. It starts with the given <B>-localport</B> and adds
 one to the number for each retry. Setting this value to 1 or below will make
-TclCurl do only one try for exact port number. Note that port numbers by nature
+TclCurl do only one try for each port number. Port numbers by nature
 are a scarce resource that will be busy at times so setting this value to something
 too low might cause unnecessary connection setup failures.
 <P>
@@ -380,6 +567,11 @@ too low might cause unnecessary connection setup failures.
 Pass the timeout in seconds. Name resolves will be kept in memory for this number
 of seconds. Set to '0' to completely disable caching, or '-1' to make the
 cached entries remain forever. By default, TclCurl caches this info for 60 seconds.
+<P>
+The name resolve functions of various libc implementations don't re-read name
+server information unless explicitly told so (for example, by calling
+<BR>&nbsp;<I>res_init(3)</I>).&nbsp;This&nbsp;may&nbsp;cause&nbsp;TclCurl&nbsp;to&nbsp;keep&nbsp;using&nbsp;the&nbsp;older&nbsp;server&nbsp;even
+if DHCP has updated the server info, and this may look like a DNS cache issue.
 <P>
 <DT><B>-dnsuseglobalcache</B>
 
@@ -485,7 +677,7 @@ will attempt to find the a .netrc file in the current user's home directory.
 
 <DD>
 Pass a string as parameter, which should be [username]:[password] to use for
-the connection. Use <B>httpauth</B> to decide authentication method.
+the connection. Use <B>-httpauth</B> to decide authentication method.
 <P>
 When using NTLM, you can set domain by prepending it to the user name and
 separating the domain and name with a forward (/) or backward slash (\). Like
@@ -504,6 +696,41 @@ prevent accidental information leakage.
 <DD>
 Pass a string as parameter, which should be [username]:[password] to use for
 the connection to the HTTP proxy.
+<P>
+<DT><B>-username</B>
+
+<DD>
+Pass a string with the user name to use for the transfer. It sets the user name
+to be used in protocol authentication. You should not use this option together
+with the (older) <B>-userpwd</B> option.
+<P>
+In order to specify the password to be used in conjunction with the user name
+use the <B>-password</B> option.
+<P>
+<DT><B>-password</B>
+
+<DD>
+Pass a string with the password to use for the transfer.
+<P>
+It should be used in conjunction with the <B>-username</B> option.
+<P>
+<DT><B>-proxyusername</B>
+
+<DD>
+Pass a string with the user name to use for the transfer while connecting to Proxy. 
+<P>
+It should be used in same way as the <B>-proxyuserpwd</B> is used, except that it
+allows the username to contain a colon, like in the following example: 
+&quot;sip:user@example.com&quot;. 
+<P>
+Note the <B>-proxyusername</B> option is an alternative way to set the user name
+while connecting to Proxy. It doesn't make sense to use them together.
+<P>
+<DT><B>-proxypassword</B>
+
+<DD>
+Pass a string with the password to use for the transfer while connecting to Proxy. It
+is meant to use together with <B>-proxyusername</B>.
 <P>
 <DT><B>-httpauth</B>
 
@@ -526,6 +753,13 @@ HTTP Digest authentication. Digest authentication is a more secure
 way to do authentication over public networks than the regular
 old-fashioned Basic method.
 <P>
+<DT><B>digestie</B>
+
+<DD>
+HTTP Digest authentication with an IE flavor. TclCurl will use a special
+&quot;quirk&quot; that IE is known to have used before version 7 and that some
+servers require the client to use.
+<P>
 <DT><B>gssnegotiate</B>
 
 <DD>
@@ -541,6 +775,19 @@ HTTP NTLM authentication. A proprietary protocol invented and used by Microsoft.
 It uses a challenge-response and hash concept similar to Digest, to prevent the
 password from being eavesdropped.
 <P>
+<DT><B>ntlmwb</B>
+
+<DD>
+NTLM delegating to winbind helper. Authentication is performed by a separate
+binary application that is executed when needed. The name of the application is
+specified at libcurl's compile time but is typically /usr/bin/ntlm_auth.
+<P>
+Note that libcurl will fork when necessary to run the winbind application and kill
+it when complete, calling waitpid() to await its exit when done. On POSIX operating
+systems, killing the process will cause a SIGCHLD signal to be raised
+(regardless of whether <B>-nosignal</B> is set). This behavior is subject to change
+in future versions of libcurl. 
+<P>
 <DT><B>any</B>
 
 <DD>
@@ -554,6 +801,38 @@ one it finds most secure.
 </DL>
 </DL>
 
+<P>
+<DT>Use it to tell TclCurl which authentication method(s) you want it to use for TLS authentication.<DD>
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><DT><B>tlsauthsrp</B>
+
+<DD>
+<DD>
+TLS-SRP authentication. Secure Remote Password authentication for TLS is
+defined in RFC 5054 and provides mutual authentication if both sides have a
+shared secret. To use TLS-SRP, you must also set the
+<B>-tlsauthusername</B> and <B>-tlsauthpassword</B> options.
+<P>
+You need to build libcurl with GnuTLS or OpenSSL with TLS-SRP support for this
+to work.
+</DL>
+</DL>
+
+<P>
+<DT><B>-tlsauthusername</B>
+
+<DD>
+Pass a string with the username to use for the TLS authentication method specified
+with the <B>-tlsauthtype</B> option. Requires that the <B>-tlsauthpassword</B> option
+also be set. 
+<P>
+<DT><B>-tlsauthpassword</B>
+
+<DD>
+Pass a string with the password to use for the TLS authentication method specified
+with the <B>-tlsauthtype</B> option. Requires that the <B>-tlsauthusername</B> option
+also be set. 
 <P>
 <DT><B>-proxyauth</B>
 
@@ -595,6 +874,20 @@ option must be set or else any unsolicited
 encoding done by the server is ignored. See the special file
 lib/README.encoding in libcurl docs for details.
 <P>
+<DT><B>-transferencoding</B>
+
+<DD>
+Adds a request for compressed Transfer Encoding in the outgoing HTTP
+request. If the server supports this and so desires, it can respond with the
+HTTP resonse sent using a compressed Transfer-Encoding that will be
+automatically uncompressed by TclCurl on receival.
+<P>
+Transfer-Encoding differs slightly from the Content-Encoding you ask for with
+<B>-encoding</B> in that a Transfer-Encoding is strictly meant to
+be for the transfer and thus MUST be decoded before the data arrives in the
+client. Traditionally, Transfer-Encoding has been much less used and supported
+by both HTTP clients and HTTP servers.
+<P>
 <DT><B>-followlocation</B>
 
 <DD>
@@ -603,11 +896,14 @@ An 1 tells the library to follow any
 
 that the server sends as part of a HTTP header.
 <P>
-<B>NOTE</B>: this means that the extension will re-send the  same
-request on the new location and follow new <B>Location: headers</B>
-all the way until no more such headers are returned.
-<B>-maxredirs</B> can be used to limit the number of redirects
+This means that the extension will re-send the  same request on the new location
+and follow new <B>Location: headers</B> all the way until no more such headers are
+returned. <B>-maxredirs</B> can be used to limit the number of redirects
 TclCurl will follow.
+<P>
+Since 7.19.4, TclCurl can limit what protocols it will automatically follow.
+The accepted protocols are set with <B>-redirprotocols</B> and it excludes the FILE
+protocol by default.
 <P>
 <DT><B>-unrestrictedauth</B>
 
@@ -629,12 +925,20 @@ number of redirects (which is the default)
 <DT><B>-post301</B>
 
 <DD>
-An 1 tells TclCurl to respect RFC 2616/10.3.2 and not
-convert POST requests into GET requests when following a 301 redirection. The
-non-RFC behaviour is ubiquitous in web browsers, so the conversion is done
-by default to maintain consistency. However, a server may require
-a POST to remain a POST after such a redirection. This option is meaningful
-only when setting <B>-followlocation</B>.
+Controls how TclCurl acts on redirects after POSTs that get a 301 or 302 response back.
+A &quot;301&quot; as parameter tells the TclCurl to respect RFC 2616/10.3.2 and not convert POST
+requests into GET requests when following a 301 redirection. Passing a &quot;302&quot; makes
+TclCurl maintain the request method after a 302 redirect. &quot;all&quot; is a convenience string
+that activates both behaviours.
+<P>
+The non-RFC behaviour is ubiquitous in web browsers, so the extension does the conversion
+by default to maintain consistency. However, a server may require a POST to remain a POST
+after such a redirection.
+<P>
+This option is meaningful only when setting <B>-followlocation</B>
+<P>
+The option used to be known as <B>-post301</B>, which should still work but is know
+deprecated.
 <P>
 <DT><B>-put</B>
 
@@ -643,6 +947,9 @@ An 1 parameter tells the extension to use HTTP PUT a file. The file to put
 must be set with <B>-infile</B> and <B>-infilesize</B>.
 <P>
 This option is deprecated starting with version 0.12.1, you should use <B>-upload</B>.
+<P>
+This option does not limit how much data TclCurl will actually send, as that is
+controlled entirely by what the read callback returns. 
 <P>
 <DT><B>-post</B>
 
@@ -851,7 +1158,7 @@ a single option and thus you need to concatenate them all in one single string.
 Set multiple cookies in one string like this: &quot;name1=content1; name2=content2;&quot;
 etc.
 <P>
-Note that this option sets the cookie header explictly in the outgoing request(s).
+This option sets the cookie header explictly in the outgoing request(s).
 If multiple requests are done due to authentication, followed redirections or similar,
 they will all get this cookie passed on.
 <P>
@@ -964,6 +1271,41 @@ chunked transfer decoding by default unless this option is set to zero.
 <P>
 </DL>
 <A NAME="lbAM">&nbsp;</A>
+<H2>SMTP options</H2>
+
+<P>
+<DL COMPACT>
+<DT><B>-mailfrom</B>
+
+<DD>
+Pass a string to specify the sender address in a mail when sending an SMTP mail with TclCurl.
+<P>
+<DT><B>-mailrcpt</B>
+
+<DD>
+Pass a list of recipients to pass to the server in your SMTP mail request.
+<P>
+Each recipient in SMTP lingo is specified with angle brackets (&lt;&gt;), but should you not use an
+angle bracket as first letter, TclCurl will assume you provide a single email address only and
+enclose that with angle brackets for you.
+<P>
+</DL>
+<A NAME="lbAN">&nbsp;</A>
+<H2>TFTP option</H2>
+
+<P>
+<DL COMPACT>
+<DT><B>tftpblksize</B>
+
+<DD>
+<P>
+Specify the block size to use for TFTP data transmission. Valid range as per RFC 2348 is 8-65464 bytes.
+The default of 512 bytes will be used if this option is not specified. The specified block size will
+only be used pending support by the remote server. If the server does not return an option acknowledgement
+or returns an option acknowledgement with no blksize, the default of 512 bytes will be used.
+<P>
+</DL>
+<A NAME="lbAO">&nbsp;</A>
 <H2>FTP options</H2>
 
 <P>
@@ -978,6 +1320,20 @@ be a plain IP address, a host name, a network interface name (under unix) or
 just a '-' to let the library use your systems default IP address. Default FTP
 operations are passive, and thus will not use PORT.
 <P>
+The address can be followed by a ':' to specify a port, optionally followed by a '-'
+o specify a port range. If the port specified is 0, the operating system will pick
+a free port. If a range is provided and all ports in the range are not available,
+libcurl will report CURLE_FTP_PORT_FAILED for the handle. Invalid port/range settings
+are ignored. IPv6 addresses followed by a port or portrange have to be in brackets.
+IPv6 addresses without port/range specifier can be in brackets.
+<P>
+Examples with specified ports:
+<P>
+<BR>&nbsp;&nbsp;eth0:0&nbsp;&nbsp;&nbsp;192.168.1.2:32000-33000&nbsp;&nbsp;&nbsp;curl.se:32123&nbsp;&nbsp;&nbsp;[::1]:1234-4567
+<P>
+You disable PORT again and go back to using the passive version by setting this option to
+an empty string.
+<P>
 <DT><B>-quote</B>
 
 <DD>
@@ -985,6 +1341,11 @@ Pass a <B>list</B> list with the FTP or SFTP commands to pass to the server prio
 ftp request. This will be done before any other FTP commands are issued (even
 before the CWD command).If you do not want to transfer any files, set
 <B>nobody</B> to '1' and <B>header</B> to '0'.
+<P>
+Prefix the command with an asterisk (*) to make TclCurl continue even if the command
+fails as by default TclCurl will stop.
+<P>
+Disable this operation again by setting an empty string to this option.
 <P>
 Keep in mind the commands to send must be 'raw' ftp commands, for example, to
 create a directory you need to send <B>mkd Test</B>, not <B>mkdir Test</B>.
@@ -1016,13 +1377,19 @@ This causes an FTP NLST command to be sent. Beware that some FTP servers list
 only files in their response to NLST, they might not include subdirectories
 and symbolic links.
 <P>
+Setting this option to 1 also implies a directory listing even if the URL
+doesn't end with a slash, which otherwise is necessary.
+<P>
+Do NOT use this option if you also use <B>-wildcardmatch</B> as it will
+effectively break that feature.
+<P>
 <DT><B>-append</B>
 
 <DD>
 A 1 parameter tells the extension to append to the remote file instead of
 overwriting it. This is only useful when uploading to a ftp site.
 <P>
-<DT><B>-ftpuseeprt</B>
+<DT><B>-ftpusepret</B>
 
 <DD>
 Set to 1 to tell TclCurl to use the EPRT (and LPRT) command when doing
@@ -1038,6 +1405,15 @@ downloads (which it always does by default). Using EPSV means that it will
 first attempt to use EPSV before using PASV, but if you pass a zero to this
 option, it will not try using EPSV, only plain PASV.
 <P>
+<DT><B>-ftpusepret</B>
+
+<DD>
+<P>
+Set to one to tell TclCurl to send a PRET command before PASV (and EPSV). Certain
+FTP servers, mainly drftpd, require this non-standard command for directory listings
+as well as up and downloads in PASV mode. Has no effect when using the active FTP
+transfers mode.
+<P>
 <DT><B>-ftpcreatemissingdirs</B>
 
 <DD>
@@ -1048,6 +1424,12 @@ This setting also applies to SFTP-connections. TclCurl will attempt to create
 the remote directory if it can't obtain a handle to the target-location. The
 creation will fail if a file of the same name as the directory to create
 already exists or lack of permissions prevents creation.
+<P>
+If set to 2, TclCurl will retry the CWD command again if the subsequent MKD
+command fails. This is especially useful if you're doing many simultanoeus
+connections against the same server and they all have this option enabled,
+as then CWD may first fail but then another connection does MKD before this
+connection and thus MKD fails but trying CWD works
 <P>
 <DT><B>-ftpresponsetimeout</B>
 
@@ -1077,37 +1459,6 @@ from the 227-response.
 <P>
 This option has no effect if PORT, EPRT or EPSV is used instead of PASV.
 <P>
-<DT><B>-usessl</B>
-
-<DD>
-You can use ftps:// URLs to explicitly switch on SSL/TSL for the control
-connection and the data connection.
-<P>
-Alternatively, and what seems to be the recommended way, you can set the
-option to one of these values:
-<P>
-<DL COMPACT><DT><DD>
-<DL COMPACT>
-<DT><B>nope</B>
-
-<DD>
-Do not attempt to use SSL
-<DT><B>try</B>
-
-<DD>
-Try using SSL, proceed anyway otherwise.
-<DT><B>control</B>
-
-<DD>
-Use SSL for the control conecction or fail with &quot;use ssl failed&quot; (64).
-<DT><B>all</B>
-
-<DD>
-Use SSL for all communication or fail with &quot;use ssl failed&quot; (64).
-</DL>
-</DL>
-
-<P>
 <DT><B>-ftpsslauth</B>
 
 <DD>
@@ -1115,10 +1466,10 @@ Use SSL for all communication or fail with &quot;use ssl failed&quot; (64).
 Pass TclCurl one of the values from below, to alter how TclCurl issues
 &quot;AUTH TLS&quot; or &quot;AUTH SSL&quot; when FTP over SSL is activated (see <B>-ftpssl</B>).
 <P>
-You may need this option because of servers like BSDFTPD-SSL from
-<A HREF="http://bsdftpd-ssl.sc.ru/">http://bsdftpd-ssl.sc.ru/</A> &quot;which won't work properly  when &quot;AUTH SSL&quot; is issued
+You may need this option because of servers like <a href="http://bsdftpd-ssl.sc.ru/">BSDFTPD-SSL</A>
+which won't work properly  when &quot;AUTH SSL&quot; is issued
 (although the server responds fine and everything) but requires &quot;AUTH TLS&quot;
-instead&quot;.
+instead.
 <P>
 <DL COMPACT><DT><DD>
 <DL COMPACT>
@@ -1198,7 +1549,7 @@ This is somewhat more standards compliant than 'nocwd' but without the full pena
 
 <P>
 </DL>
-<A NAME="lbAN">&nbsp;</A>
+<A NAME="lbAP">&nbsp;</A>
 <H2>Protocol options</H2>
 
 <P>
@@ -1228,7 +1579,8 @@ no effect when doing FTP via a proxy. Beware that not all proxies support this f
 <DT><B>-crlf</B>
 
 <DD>
-Convert unix newlines to CRLF newlines on FTP transfers.
+If set to '1', TclCurl converts Unix newlines to CRLF newlines on transfers. Disable
+this option again by setting the value to '0'.
 <P>
 <DT><B>-range</B>
 
@@ -1255,6 +1607,10 @@ Set this option to 0 to make the transfer start from the beginning
 <P>
 For FTP, set this option to -1 to make the transfer start from the end of the
 target file (useful to continue an interrupted upload). 
+<P>
+When doing uploads with FTP, the resume position is where in the local/source
+file TclCurl should try to resume the upload from and it will then append the
+source file to the remote target file.
 <P>
 <DT><B>-customrequest</B>
 
@@ -1330,7 +1686,7 @@ this given limit. This concerns both FTP and HTTP transfers.
 <DD>
 This defines how the <B>timevalue</B> value is treated. You can set this
 parameter to <B>ifmodsince</B> or <B>ifunmodsince</B>.  This feature applies to
-HTTP and FTP.
+HTTP, FTP and FILE.
 <P>
 <DT><B>-timevalue</B>
 
@@ -1340,7 +1696,7 @@ used in a condition as specified with <B>timecondition</B>.
 <P>
 <P>
 </DL>
-<A NAME="lbAO">&nbsp;</A>
+<A NAME="lbAQ">&nbsp;</A>
 <H2>Connection options</H2>
 
 <P>
@@ -1412,7 +1768,7 @@ setting a smaller
 
 than before may cause open connections to unnecessarily get closed.
 <P>
-<B>Note</B> that if you add this easy handle to a multi handle, this setting is not
+If you add this easy handle to a multi handle, this setting is not
 being acknowledged, instead you must configure the multi handle its own
 <B>maxconnects</B> option.
 <P>
@@ -1459,8 +1815,62 @@ Resolve to ipv6 addresses.
 </DL>
 
 <P>
+<DT><B>-resolve</B>
+
+<DD>
+Pass a list of strings with host name resolve information to use for requests with
+this handle.
+<P>
+Each single name resolve string should be written using the format
+HOST:PORT:ADDRESS where HOST is the name TclCurl will try to resolve, PORT is
+the port number of the service where TclCurl wants to connect to the HOST and
+ADDRESS is the numerical IP address. If libcurl is built to support IPv6,
+ADDRESS can be either IPv4 or IPv6 style addressing.
+<P>
+This option effectively pre-populates the DNS cache with entries for the
+host+port pair so redirects and everything that operations against the
+HOST+PORT will instead use your provided ADDRESS.
+<P>
+You can remove names from the DNS cache again, to stop providing these fake
+resolves, by including a string in the linked list that uses the format
+&quot;-HOST:PORT&quot;. The host name must be prefixed with a dash, and the host name
+and port number must exactly match what was already added previously.
+<P>
+<DT><B>-usessl</B>
+
+<DD>
+Pass a one of the values from below to make TclCurl use your desired level of SSL for the transfer.
+This is for enabling SSL/TLS when you use FTP, SMTP, POP3, IMAP etc.
+<P>
+You can use ftps:// URLs to explicitly switch on SSL/TSL for the control
+connection and the data connection.
+<P>
+Alternatively you can set the option to one of these values:
+<P>
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><B>nope</B>
+
+<DD>
+Do not attempt to use SSL
+<DT><B>try</B>
+
+<DD>
+Try using SSL, proceed anyway otherwise.
+<DT><B>control</B>
+
+<DD>
+Use SSL for the control conecction or fail with &quot;use ssl failed&quot; (64).
+<DT><B>all</B>
+
+<DD>
+Use SSL for all communication or fail with &quot;use ssl failed&quot; (64).
 </DL>
-<A NAME="lbAP">&nbsp;</A>
+</DL>
+
+<P>
+</DL>
+<A NAME="lbAR">&nbsp;</A>
 <H2>SSL and security options</H2>
 
 <P>
@@ -1472,6 +1882,8 @@ Pass a string as parameter. The string should be the file name of your certifica
 The default format is &quot;PEM&quot; and can be changed with <B>-sslcerttype</B>.
 <P>
 With NSS this is the nickname of the certificate you wish to authenticate with.
+If you want to use a file from the current directory, please precede it with the 
+&quot;./&quot; prefix, in order to avoid confusion with a nickname.
 <P>
 <DT><B>-sslcerttype</B>
 
@@ -1565,11 +1977,14 @@ TclCurl uses a default bundle of CA certificates that comes with libcurl but you
 alternate certificates with the <B>-cainfo</B> or the <B>-capath</B> options.
 <P>
 When <B>-sslverifypeer</B> is nonzero, and the verification fails to prove that the certificate
-is authentic, the connection fails. When the option is zero, the connection succeeds regardless. 
+is authentic, the connection fails. When the option is zero, the peer certificate verification
+succeeds regardless. 
 <P>
 Authenticating the certificate is not by itself very useful. You typically want to ensure
 that the server, as authentically identified by its certificate, is the server you mean to
-be talking to, use <B>-sslverifyhost</B> to control that.
+be talking to, use <B>-sslverifyhost</B> to control that. The check that the host name in
+the certificate is valid for the host name you're connecting to is done
+independently of this option.
 <P>
 <DT><B>-cainfo</B>
 
@@ -1577,6 +1992,9 @@ be talking to, use <B>-sslverifyhost</B> to control that.
 Pass a file naming holding the certificate to verify the peer with. This only
 makes sense when used in combination with the <B>-sslverifypeer</B> option, if
 it is set to zero <B>-cainfo</B> need not even indicate an accessible file.
+<P>
+This option is by default set to the system path where libcurl's cacert bundle
+is assumed to be stored, as established at build time.
 <P>
 When built against NSS this is the directory that the NSS certificate database
 resides in.
@@ -1597,7 +2015,8 @@ option. Otherwise, the result of the check is not considered as failure.
 
 <DD>
 Pass the directory holding multiple CA certificates to verify the peer with.
-The certificate directory must be prepared using the openssl c_rehash utility.
+If libcurl is built against OpenSSL, the certificate directory must be prepared
+using the openssl c_rehash utility.
 This only makes sense when used in combination with the  <B>-sslverifypeer</B>
 option, if it is set to zero, <B>-capath</B> need not even indicate an accessible
 path.
@@ -1605,6 +2024,7 @@ path.
 This option apparently does not work in Windows due to some limitation in openssl.
 <P>
 This option is OpenSSL-specific and does nothing if libcurl is built to use GnuTLS.
+NSS-powered libcurl provides the option only for backward compatibility.
 <P>
 <DT><B>-crlfile</B>
 
@@ -1620,18 +2040,10 @@ check against all the elements of the certificate chain if a CRL file is passed.
 This option makes sense only when used in combination with the <B>-sslverifypeer</B>
 option. 
 <P>
-<DT><B>-randomfile</B>
-
-<DD>
-Pass a file name. The file will be used to read from to seed the random engine
-for SSL. The more random the specified file is, the more secure will the SSL
-connection become.
-<P>
-<DT><B>-egdsocket</B>
-
-<DD>
-Pass a path name to the Entropy Gathering Daemon socket. It will be used to seed
-the random engine for SSL.
+A specific error code (CURLE_SSL_CRL_BADFILE) is defined with the option. It is returned
+when the SSL exchange fails because the CRL file cannot be loaded. A failure in certificate
+verification due to a revocation information found in the CRL does not trigger this specific
+error.
 <P>
 <DT><B>-sslverifyhost</B>
 
@@ -1657,10 +2069,32 @@ useful setting).
 When the value is 0, the connection succeeds regardless of the names in
 the certificate.
 <P>
-The default is 2.
+The default value for this option is 2.
 <P>
 This option controls the identity that the server <I>claims</I>. The server
-could be lying. To control lying, see <B>sslverifypeer</B>.
+could be lying. To control lying, see <B>-sslverifypeer</B>. If libcurl is built
+against NSS and <B>-verifypeer</B> is zero, <B>-verifyhost</B> is ignored.
+<P>
+<DT><B>-certinfo</B>
+
+<DD>
+Set to '1' to enable TclCurl's certificate chain info gatherer. With this enabled, TclCurl
+(if built with OpenSSL) will extract lots of information and data about the certificates
+in the certificate chain used in the SSL connection. This data can then be to extracted
+after a transfer using the <B>getinfo</B> command and its option <B>certinfo</B>.
+<P>
+<DT><B>-randomfile</B>
+
+<DD>
+Pass a file name. The file will be used to read from to seed the random engine
+for SSL. The more random the specified file is, the more secure the SSL
+connection becomes.
+<P>
+<DT><B>-egdsocket</B>
+
+<DD>
+Pass a path name to the Entropy Gathering Daemon socket. It will be used to seed
+the random engine for SSL.
 <P>
 <DT><B>-sslcypherlist</B>
 
@@ -1687,7 +2121,7 @@ You'll find more details about the NSS cipher lists on this URL:
 
 <DD>
 Pass a 0 to disable TclCurl's use of SSL session-ID caching or a 1 to enable it.
-By default all transfers are done using the cache. Note that while nothing ever
+By default all transfers are done using the cache. While nothing ever
 should get hurt by attempting to reuse SSL session-IDs, there seem to be broken SSL
 implementations in the wild that may require you to disable this in order for you to
 succeed.
@@ -1701,8 +2135,17 @@ is set but does not match one of these, 'private' will be used. Set the string
 to NULL to disable kerberos4. Set the string to &quot;&quot; to disable kerberos
 support for FTP.
 <P>
+<DT><B>-gssapidelegation</B>
+
+<DD>
+Set the option to 'flag' to allow unconditional GSSAPI credential delegation. The delegation
+is disabled by default since 7.21.7. Set the parameter to 'policyflag' to delegate only if
+the OK-AS-DELEGATE flag is set in the service ticket in case this feature is supported by the
+GSSAPI implementation and the definition of GSS_C_DELEG_POLICY_FLAG was available at compile-time.
+<P>
+<P>
 </DL>
-<A NAME="lbAQ">&nbsp;</A>
+<A NAME="lbAS">&nbsp;</A>
 <H2>SSH options</H2>
 
 <P>
@@ -1745,16 +2188,76 @@ and SFTP transfers.
 <DT><B>-publickeyfile</B>
 
 <DD>
-Pass the file name for your public key. If not used, TclCurl defaults to using <B>~/.ssh/id_dsa.pub</B>.
+Pass the file name for your public key. If not used, TclCurl defaults to using <B>$HOME/.ssh/id_dsa.pub</B>.
+HOME environment variable is set, and just <B>id_dsa</B> in the current directory if not. 
 <P>
 <DT><B>-privatekeyfile</B>
 
 <DD>
-Pass the file name for your private key. If not used, TclCurl defaults to using <B>~/.ssh/id_dsa</B>.
+Pass the file name for your private key. If not used, TclCurl defaults to using <B>$HOME/.ssh/id_dsa.pub</B>.
+HOME environment variable is set, and just <B>id_dsa</B> in the current directory if not.
 If the file is password-protected, set the password with <B>-keypasswd</B>.
 <P>
+<DT><B>-sshknownhosts</B>
+
+<DD>
+Pass a string holding the file name of the known_host file to use. The known_hosts
+file should use the OpenSSH file format as supported by libssh2. If this file is
+specified, TclCurl will only accept connections with hosts that are known and present
+in that file, with a matching public key. Use <B>-sshkeyproc</B> to alter the default
+behavior on host and key (mis)matching.
+<P>
+<DT><B>-sshkeyproc </B>
+
+<DD>
+Pass a the name of the procedure that will be called when the known_host matching has
+been done, to allow the application to act and decide for TclCurl how to proceed. The
+callback will only be called if <B>-knownhosts</B> is also set.
+<P>
+It gets passed a list with three elements, the first one is a list with the type of the
+key from the known_hosts file and the key itself, the second is another list with
+the type of the key from the remote site and the key itslef, the third tells you
+what TclCurl thinks about the matching status. 
+<P>
+The known key types are: &quot;rsa&quot;, &quot;rsa1&quot; and &quot;dss&quot;, in any other case &quot;unknown&quot; is given.
+<P>
+TclCurl opinion about how they match may be: &quot;match&quot;, &quot;mismatch&quot;, &quot;missing&quot; or &quot;error&quot;.
+<P>
+The procedure must return:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><B>0</B>
+
+<DD>
+The host+key is accepted and TclCurl will append it to the known_hosts file before
+continuing with the connection. This will also add the host+key combo to the known_host
+pool kept in memory if it wasn't already present there. The adding of data to
+the file is done by completely replacing the file with a new copy, so the permissions of
+the file must allow this.
+<DT><B>1</B>
+
+<DD>
+The host+key is accepted, TclCurl will continue with the connection. This will also add
+the host+key combo to the known_host pool kept in memory if it wasn't already present
+there.
+<DT><B>2</B>
+
+<DD>
+The host+key is rejected. TclCurl will close the connection.
+<DT><B>3</B>
+
+<DD>
+The host+key is rejected, but the SSH connection is asked to be kept alive. This feature
+could be used when the app wants to somehow return back and act on the host+key situation
+and then retry without needing the overhead of setting it up from scratch again.
 </DL>
-<A NAME="lbAR">&nbsp;</A>
+</DL>
+
+<P>
+Any other value will cause the connection to be closed.
+<P>
+</DL>
+<A NAME="lbAT">&nbsp;</A>
 <H2>Other options</H2>
 
 <P>
@@ -1764,14 +2267,6 @@ If the file is password-protected, set the password with <B>-keypasswd</B>.
 <DD>
 Name of the Tcl array variable where TclCurl will store the headers returned
 by the server.
-<P>
-When a server sends a chunked encoded transfer, it may contain a
-trailer. That trailer is identical to a HTTP header and if such a trailer is
-received it is passed to the application using this callback as well. There
-are several ways to detect it being a trailer and not an ordinary header: 1)
-it comes after the response-body. 2) it comes after the final header line (CR
-LF) 3) a Trailer: header among the response-headers mention what header to
-expect in the trailer.
 <P>
 <DT><B>-bodyvar</B>
 
@@ -1804,19 +2299,32 @@ See <I>tclcurl_share</I> for details.
 <DD>
 Pass a number as a parameter, containing the value of the permissions that will
 be assigned to newly created files on the remote server. The default value is 0644,
-but any valid value can be used. The only protocols that can use this are <A HREF="sftp://,">sftp://,</A>
-scp:// and <A HREF="file://.">file://.</A>
+but any valid value can be used. The only protocols that can use this are sftp://,
+scp:// and file://.
 <P>
 <DT><B>-newdirectoryperms</B>
 
 <DD>
 Pass a number as a parameter, containing the value of the permissions that will be
 assigned to newly created directories on the remote server. The default value is 0755,
-but any valid value can be used. The only protocols that can use this are <A HREF="sftp://,">sftp://,</A> scp://
-and <A HREF="file://.">file://.</A>
+but any valid value can be used. The only protocols that can use this are sftp://, scp://
+and file://.
 <P>
 </DL>
-<A NAME="lbAS">&nbsp;</A>
+<A NAME="lbAU">&nbsp;</A>
+<H2>Telnet options</H2>
+
+<P>
+<DL COMPACT>
+<DT><B>-telnetoptions</B>
+
+<DD>
+Pass a list with variables to pass to the telnet negotiations. The variables should be in
+the format &lt;option=value&gt;. TclCurl supports the options 'TTYPE', 'XDISPLOC' and 'NEW_ENV'.
+See the TELNET standard for details.
+<P>
+</DL>
+<A NAME="lbAV">&nbsp;</A>
 <H2>NOT SUPPORTED</H2>
 
 Some of the options libcurl offers are not supported, I don't think them
@@ -1830,7 +2338,7 @@ complain:
 <B>CURLOPT_CONNECT_ONLY, CURLOPT_OPENSOCKETFUNCTION, CURLOPT_OPENSOCKETDATA.</B>
 
 <P>
-<A NAME="lbAT">&nbsp;</A>
+<A NAME="lbAW">&nbsp;</A>
 <H2>curlHandle perform</H2>
 
 This procedure is called after the
@@ -1871,9 +2379,14 @@ The error codes are:
 Unsupported protocol. This build of TclCurl has no support for this protocol.
 <DT>2<DD>
 Very early initialization code failed. This is likely to be and internal error
-or problem.
+or a resource problem where something fundamental couldn't get done at init time.
 <DT>3<DD>
 URL malformat. The syntax was not correct.
+<DT>4<DD>
+A requested feature, protocol or option was not found built-in in this libcurl
+due to a build-time decision. This means that a feature or option was not
+enabled or explicitly disabled when libcurl was built and in order to get it
+to function you have to get a rebuilt libcurl.
 <DT>5<DD>
 Couldn't resolve proxy. The given proxy host could not be resolved.
 <DT>6<DD>
@@ -1939,8 +2452,8 @@ HTTP post error. Internal post-request generation error.
 SSL connect error. The SSL handshaking failed, the error buffer may have
 a clue to the reason, could be certificates, passwords, ...
 <DT>36<DD>
-FTP bad download resume. Couldn't continue an earlier aborted download, probably
-because you are trying to resume beyond the file size.
+The download could not be resumed because the specified offset was out of the
+file boundary.
 <DT>37<DD>
 A file given with FILE:// couldn't be read. Did you checked the permissions?
 <DT>38<DD>
@@ -1959,7 +2472,10 @@ Interface error. A specified outgoing interface could not be used.
 Too many redirects. When following redirects, TclCurl hit the maximum amount, set
 your limit with --maxredirs
 <DT>48<DD>
-Unknown TELNET option specified.
+An option passed to TclCurl is not recognized/known. Refer to the appropriate
+documentation. This is most likely a problem in the program that uses
+TclCurl. The error buffer might contain more specific information about which
+exact option it concerns.
 <DT>49<DD>
 A telnet option string was illegally formatted.
 <DT>51<DD>
@@ -2008,7 +2524,7 @@ Unknown transfer ID.
 <DT>73<DD>
 TFTP file already exists and will not be overwritten.
 <DT>74<DD>
-No such user in the TFTP server and good behaving TFTP server
+No such user in the TFTP server and good behaving TFTP servers
 should never return this.
 <DT>75<DD>
 Character conversion failed.
@@ -2024,9 +2540,21 @@ Failed to shut down the SSL connection
 Failed to load CRL file
 <DT>83<DD>
 Issuer check failed
+<DT>84<DD>
+The FTP server does not understand the PRET command at all or does not support
+the given argument. Be careful when using <B>-customrequest</B>, a
+custom LIST command will be sent with PRET CMD before PASV as well.
+<DT>85<DD>
+Mismatch of RTSP CSeq numbers.
+<DT>86<DD>
+Mismatch of RTSP Session Identifiers.
+<DT>87<DD>
+Unable to parse FTP file list (during FTP wildcard downloading).
+<DT>88<DD>
+Chunk callback reported error.
 <P>
 </DL>
-<A NAME="lbAU">&nbsp;</A>
+<A NAME="lbAX">&nbsp;</A>
 <H2>curlHandle getinfo option</H2>
 
 Request internal information from the curl session with this procedure.
@@ -2145,6 +2673,22 @@ connections to save time.
 Returns the IP address of the most recent connection done with this handle.
 This string may be IPv6 if that's enabled.
 <P>
+<DT><B>primaryport</B>
+
+<DD>
+Returns the destination port of the most recent connection done with this handle.
+<P>
+<DT><B>localip</B>
+
+<DD>
+Returns the local (source) IP address of the most recent connection done
+with this handle. This string may be IPv6 if that's enabled.
+<P>
+<DT><B>localport</B>
+
+<DD>
+Returns the local (source) port of the most recent connection done with this handle.
+<P>
 <DT><B>sizeupload</B>
 
 <DD>
@@ -2196,7 +2740,7 @@ engines may be available at run-time.
 Returns the content-length of the download. This is the value read from the
 <B>Content-Length:</B>
 
-field.
+field. If the size isn't known, it returns -1.
 <P>
 <DT><B>contentlengthupload</B>
 
@@ -2225,7 +2769,8 @@ proxy athentication.
 <DT><B>oserrno</B>
 
 <DD>
-Returns the errno value from a connect failure.
+Returns the errno value from a connect failure. This value is only set on
+failure, it is no reset after a successfull operation.
 <P>
 <DT><B>cookielist</B>
 
@@ -2241,8 +2786,26 @@ Returns a string holding the path of the entry path. That is the initial path
 TclCurl ended up in when logging on to the remote FTP server. Returns an empty
 string if something is wrong.
 <P>
+<DT><B>certinfo</B>
+
+<DD>
+Returns list with information about the certificate chain, assuming you had the
+<B>-certinfo</B> option enabled when the previous request was done. The list
+first item reports how many certs it found and then you can extract info for each
+of those certs by following the list. The info chain is provided in a series of data
+in the format &quot;name:content&quot; where the content is for the specific named data.
+<P>
+NOTE: this option is only available in libcurl built with OpenSSL support.
+<P>
+<DT><B>conditionunmet</B>
+
+<DD>
+Returns the number 1 if the condition provided in the previous request
+didn't match (see <I>timecondition</I>), you will get a zero if the condition
+instead was met.
+<P>
 </DL>
-<A NAME="lbAV">&nbsp;</A>
+<A NAME="lbAY">&nbsp;</A>
 <H2>curlHandle cleanup</H2>
 
 This procedure must be the last one to call for a curl session. It is the
@@ -2257,7 +2820,7 @@ This will effectively close all connections TclCurl has used and possibly
 has kept open until now. Don't call this procedure if you intend to transfer
 more files.
 <P>
-<A NAME="lbAW">&nbsp;</A>
+<A NAME="lbAZ">&nbsp;</A>
 <H2>curlHandle reset</H2>
 
 <P>
@@ -2270,7 +2833,7 @@ created with curl::init.
 It does not change the following information kept in the handle: live
 connections, the Session ID cache, the DNS cache, the cookies and shares.
 <P>
-<A NAME="lbAX">&nbsp;</A>
+<A NAME="lbBA">&nbsp;</A>
 <H2>curlHandle duphandle</H2>
 
 This procedure will return a new curl handle, a duplicate,
@@ -2288,18 +2851,18 @@ connections, SSL sessions or cookies.
 A new curl handle or an error message if the copy fails.
 <P>
 </DL>
-<A NAME="lbAY">&nbsp;</A>
+<A NAME="lbBB">&nbsp;</A>
 <H2>curlHandle pause</H2>
 
 You can use this command from within a progress callback procedure
 to pause the transfer.
 <P>
-<A NAME="lbAZ">&nbsp;</A>
+<A NAME="lbBC">&nbsp;</A>
 <H2>curlHandle resume</H2>
 
 Resumes a transfer paused with <B>curlhandle pause</B>
 <P>
-<A NAME="lbBA">&nbsp;</A>
+<A NAME="lbBD">&nbsp;</A>
 <H2>curl::transfer</H2>
 
 In case you do not want to use persistant connections you can use this
@@ -2316,7 +2879,7 @@ been returned by <I>$curlHandle getinfo option</I>.
 The same error code <B>perform</B> would return.
 <P>
 </DL>
-<A NAME="lbBB">&nbsp;</A>
+<A NAME="lbBE">&nbsp;</A>
 <H2>curl::version</H2>
 
 Returns a string with the version number of tclcurl, libcurl and some of
@@ -2328,7 +2891,7 @@ its important components (like OpenSSL version).
 The string with the version info.
 <P>
 </DL>
-<A NAME="lbBC">&nbsp;</A>
+<A NAME="lbBF">&nbsp;</A>
 <H2>curl::escape url</H2>
 
 This procedure will convert the given input string to an URL encoded string and
@@ -2341,7 +2904,7 @@ two-digit hexadecimal number)
 <DD>
 The converted string.
 </DL>
-<A NAME="lbBD">&nbsp;</A>
+<A NAME="lbBG">&nbsp;</A>
 <H2>curl::unescape url</H2>
 
 This procedure will convert the given URL encoded input string to a &quot;plain
@@ -2355,7 +2918,7 @@ converted to their plain text versions.
 The string unencoded.
 <P>
 </DL>
-<A NAME="lbBE">&nbsp;</A>
+<A NAME="lbBH">&nbsp;</A>
 <H2>curl::curlConfig option</H2>
 
 Returns some information about how you have
@@ -2388,7 +2951,7 @@ with 8 bits for each part; major, minor, patch. So  that  libcurl
 0c0d0e...
 <P>
 </DL>
-<A NAME="lbBF">&nbsp;</A>
+<A NAME="lbBI">&nbsp;</A>
 <H2>curl::versioninfo option</H2>
 
 Returns information about various run-time features in TclCurl.
@@ -2482,6 +3045,13 @@ Libcurl was built with support for SSPI. This is only available on Windows and
 makes libcurl use Windows-provided functions for NTLM authentication. It also
 allows libcurl to use the current user and the current user's password without
 the app having to pass them on.
+<DT><B>TLSAUTH_SRP</B>
+
+<DD>
+Libcurl was built with support for TLS-SRP.
+<B>NTLM_WB</B>
+
+Libcurl was built with support for NTLM delegation to a winbind helper.
 </DL>
 </DL>
 
@@ -2513,15 +3083,15 @@ will be listed using uppercase. There may be none, one or several protocols
 in the list.
 <P>
 </DL>
-<A NAME="lbBG">&nbsp;</A>
+<A NAME="lbBJ">&nbsp;</A>
 <H2>curl::easystrerror errorCode</H2>
 
 This procedure returns a string describing the error code passed in the argument.
 <P>
-<A NAME="lbBH">&nbsp;</A>
+<A NAME="lbBK">&nbsp;</A>
 <H2>SEE ALSO</H2>
 
-<I>curl, <A HREF="http://curl.haxx.se/docs/httpscripting.html">The art of HTTP scripting</A> RFC 2396,</I>
+<I>curl, <a href="http://curl.haxx.se/docs/httpscripting.html">The art of HTTP scripting</A>, RFC 2396,</I>
 
 <P>
 
@@ -2539,31 +3109,33 @@ This procedure returns a string describing the error code passed in the argument
 <DT><A HREF="#lbAJ">Network options</A><DD>
 <DT><A HREF="#lbAK">Names and Passwords options</A><DD>
 <DT><A HREF="#lbAL">HTTP options</A><DD>
-<DT><A HREF="#lbAM">FTP options</A><DD>
-<DT><A HREF="#lbAN">Protocol options</A><DD>
-<DT><A HREF="#lbAO">Connection options</A><DD>
-<DT><A HREF="#lbAP">SSL and security options</A><DD>
-<DT><A HREF="#lbAQ">SSH options</A><DD>
-<DT><A HREF="#lbAR">Other options</A><DD>
-<DT><A HREF="#lbAS">NOT SUPPORTED</A><DD>
-<DT><A HREF="#lbAT">curlHandle perform</A><DD>
-<DT><A HREF="#lbAU">curlHandle getinfo option</A><DD>
-<DT><A HREF="#lbAV">curlHandle cleanup</A><DD>
-<DT><A HREF="#lbAW">curlHandle reset</A><DD>
-<DT><A HREF="#lbAX">curlHandle duphandle</A><DD>
-<DT><A HREF="#lbAY">curlHandle pause</A><DD>
-<DT><A HREF="#lbAZ">curlHandle resume</A><DD>
-<DT><A HREF="#lbBA">curl::transfer</A><DD>
-<DT><A HREF="#lbBB">curl::version</A><DD>
-<DT><A HREF="#lbBC">curl::escape url</A><DD>
-<DT><A HREF="#lbBD">curl::unescape url</A><DD>
-<DT><A HREF="#lbBE">curl::curlConfig option</A><DD>
-<DT><A HREF="#lbBF">curl::versioninfo option</A><DD>
-<DT><A HREF="#lbBG">curl::easystrerror errorCode</A><DD>
-<DT><A HREF="#lbBH">SEE ALSO</A><DD>
+<DT><A HREF="#lbAM">SMTP options</A><DD>
+<DT><A HREF="#lbAN">TFTP option</A><DD>
+<DT><A HREF="#lbAO">FTP options</A><DD>
+<DT><A HREF="#lbAP">Protocol options</A><DD>
+<DT><A HREF="#lbAQ">Connection options</A><DD>
+<DT><A HREF="#lbAR">SSL and security options</A><DD>
+<DT><A HREF="#lbAS">SSH options</A><DD>
+<DT><A HREF="#lbAT">Other options</A><DD>
+<DT><A HREF="#lbAU">Telnet options</A><DD>
+<DT><A HREF="#lbAV">NOT SUPPORTED</A><DD>
+<DT><A HREF="#lbAW">curlHandle perform</A><DD>
+<DT><A HREF="#lbAX">curlHandle getinfo option</A><DD>
+<DT><A HREF="#lbAY">curlHandle cleanup</A><DD>
+<DT><A HREF="#lbAZ">curlHandle reset</A><DD>
+<DT><A HREF="#lbBA">curlHandle duphandle</A><DD>
+<DT><A HREF="#lbBB">curlHandle pause</A><DD>
+<DT><A HREF="#lbBC">curlHandle resume</A><DD>
+<DT><A HREF="#lbBD">curl::transfer</A><DD>
+<DT><A HREF="#lbBE">curl::version</A><DD>
+<DT><A HREF="#lbBF">curl::escape url</A><DD>
+<DT><A HREF="#lbBG">curl::unescape url</A><DD>
+<DT><A HREF="#lbBH">curl::curlConfig option</A><DD>
+<DT><A HREF="#lbBI">curl::versioninfo option</A><DD>
+<DT><A HREF="#lbBJ">curl::easystrerror errorCode</A><DD>
+<DT><A HREF="#lbBK">SEE ALSO</A><DD>
 </DL>
 <HR>
-This document was created by man2html,
-using the manual pages.<BR>
+This document was created by man2html, using the manual pages.<BR>
 </BODY>
 </HTML>

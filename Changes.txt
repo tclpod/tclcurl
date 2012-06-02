@@ -1,3 +1,126 @@
+Version 7.22.0 released 03-Oct-2011
+
+    * New configure options:
+
+        * resolve: Pass a list of strings with host name resolve information to use for
+          requests with this handle.
+
+          Each single name resolve string should be written using the format
+          HOST:PORT:ADDRESS where HOST is the name TclCurl will try to resolve, PORT is
+          the port number of the service where TclCurl wants to connect to the HOST and
+          ADDRESS is the numerical IP address. If libcurl is built to support IPv6,
+          ADDRESS can be either IPv4 or IPv6 style addressing.
+
+        * tlsauthusername, tlsauthpassword: Pass a string with the username or password to
+          use for the TLS authentication method specified with the 'tlsauthtype' option.
+ 
+        * tlsauthtype: Use it to tell TclCurl which authentication method(s) you want it to
+          use for TLS authentication. So far the only method is 'tlsauthsrp' for TLS-SRP
+          authentication. Secure Remote Password authentication for TLS is defined in
+          RFC 5054 and provides mutual authentication if both sides have a shared secret.
+
+          You need to build libcurl with GnuTLS or OpenSSL with TLS-SRP support for this
+          to work.
+
+        * transferencoding: Adds a request for compressed Transfer Encoding in the outgoing
+          HTTP request. If the server supports this and so desires, it can respond with the
+          HTTP resonse sent using a compressed Transfer-Encoding that will be automatically
+          uncompressed by TclCurl on receival.
+
+          Transfer-Encoding differs slightly from the Content-Encoding you ask for with
+          'encoding' in that a Transfer-Encoding is strictly meant to be for the transfer
+           and thus MUST be decoded before the data arrives in the client. Traditionally,
+          Transfer-Encoding has been much less used and supported by both HTTP clients and
+          HTTP servers.
+
+        * wildcard: Set this option to 1 if you want to transfer multiple files according to
+          a file name pattern. The pattern can be specified as part of the url, using an
+          fnmatch-like pattern (Shell Pattern Matching) in the last part of URL (file name).
+
+          So far it only works with FTP.
+
+        * fnmatchfunction: Name of the procedure that will be called instead of the internal
+          wildcard matching function, it should match the following prototype:
+
+                FnMatchProc {pattern string}
+
+          Returns '0' if it matches, '1' if it doesn't.
+
+        * chunkbgnproc: Name of the procedure that will be called before a file will be transfered
+          by ftp, it should match the following prototype:
+
+                ChunkBgnProc {remains}
+
+          Where remains is the number of files still to be transfered (or skipped)
+
+          This callback makes sense only when using the 'wildcard' option.
+
+        * chunkendproc: Name of the procedure that will be called after a file is transfered
+          (or skipped) by ftp when using the wildcard option, it should match the following
+          prototype:
+
+                ChunkEndProc {}
+
+          It should return '0' if everyhting is fine and '1' if some error occurred.
+
+        * chunkbgnvar: Name of the variable in the global scope that will contain the data of
+          the file about to be transfered. If you don't use this option '::fileData' will be used.
+
+          The available data is: filename, filetype (file, directory, symlink, device block,
+          device char, named pipe, socket, door or error if it couldn't be identified), time, perm,
+          uid, gid, size, hardlinks and flags.
+
+        * mailfrom: Pass a string to specify the sender address in a mail when sending an SMTP mail
+          with TclCurl.
+
+        * mailrcpt: Pass a list of recipients to pass to the server in your SMTP mail request.
+
+        * ftpusepret: Set to 1 to tell TclCurl to use the EPRT (and LPRT) command when doing
+          active FTP downloads (which is enabled by 'ftpport'). Using EPRT means that it will
+          first attempt to use EPRT and then LPRT before using PORT, if you pass zero to this
+          option, it will not try using EPRT or LPRT, only plain PORT.
+
+        * gssapidelegation: Set the option to 'flag' to allow unconditional GSSAPI
+          credential delegation. The delegation is disabled by default. Set the parameter
+          to 'policyflag' to delegate only if the OK-AS-DELEGATE flag is set in the service
+          ticket in case this feature is supported by the GSSAPI implementation and the
+          definition of GSS_C_DELEG_POLICY_FLAG was available at compile-time.
+
+        * telnetoptions: Pass a list with variables to pass to the telnet negotiations. 
+          The variables should be in the format <option=value>. TclCurl supports the
+          options'TTYPE', 'XDISPLOC' and 'NEW_ENV'. See the TELNET standard for details.
+
+
+    * Updated configure options:
+
+        * httpauth new method 'ntlmwb': NTLM delegating to winbind helper. Authentication is
+          performed by a separate binary application that is executed when needed. The name
+          of the application is specified at libcurl's compile time but is typically
+          /usr/bin/ntlm_auth.
+
+        * new proxy type 'socsk5h' to enable socks5 and asking the proxy to do the resolving
+
+    * New info available through the 'getinfo' command:
+
+        * primaryport: Returns the destination port of the most recent connection done.
+
+        * localip: Returns the local (source) IP address of the most recent connection done.
+          This string may be IPv6 if that's enabled.
+
+        * localport: Returns the local (source) port of the most recent connection done.
+
+    * Bug fixes:
+
+        * Sven Hoexter let me know that TclCurl no longer build as curl/types.h and curl/easy.h
+          no longer exists:
+
+        * Gary Nigg noticed that 'bodyvar' had to be reconfigured for each transfer.
+
+        * John Coppens got an error when he tried the 'curl::transfer' command.
+
+        * Gerald Dumas reported that TclCurl wouldn't compile in FreeBSD, it so happens that
+          the upstart type 'ulong' isn't good enough for it.
+
 
 
 Version 7.19.0 released 1-Sep-2008
@@ -47,12 +170,6 @@ Version 7.19.0 released 1-Sep-2008
           warnings while compiling, they should be harmless though.
 
         * The internal workings of the 'any' http authentication has been changed.
-
-2008-08-25 Andres Garcia <fandom@telefonica.net>
-
-    * generic/tclcurl.h,
-      generic/tclcurl.c: Changed the 'anyauth rewind' to use the new
-      CURLOPT_SEEKFUNCTION and CURLOPT_SEEKDATA.
 
 Version 7.17.1 released 1-Nov-2007
 

@@ -4,7 +4,7 @@
  * Implementation of the part of the TclCurl extension that deals with libcurl's
  * 'multi' interface.
  *
- * Copyright (c)2002-2009 Andres Garcia Garcia.
+ * Copyright (c)2002-2011 Andres Garcia Garcia.
  *
  * See the file "license.terms" for information on usage and redistribution
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.

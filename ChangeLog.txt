@@ -1,4 +1,89 @@
-2009-09-25 Andres Garcia <fandom@telefonica.netrc
+2011-10-03 Andres Garcia <fandom@telefonica.net>
+
+    * Release version 7.22.0
+
+2011-10-01 Andres Garcia <fandom@telefonica.net>
+
+    * generic/tclcurl.c: Fix 'bodyvar' bug.
+
+2011-09-29 Andres Garcia <fandom@telefonica.net>
+
+    * generic/tclcurl.h,
+      generic/tclcurl.c: Added support for CURLAUTH_NTLM_WB, and CURLOPT_TELNETOPTIONS.
+
+2011-09-29 Andres Garcia <fandom@telefonica.net>
+
+    * generic/tclcurl.h,
+      generic/tclcurl.c,
+      tests/getInfo.tcl: Added support for the 'getinfo' options CURLINFO_PRIMARY_PORT,
+      CURLINFO_LOCAL_IP and CURLINFO_LOCAL_PORT
+
+2011-09-27 Andres Garcia <fandom@telefonica.net>
+
+    * generic/tclcurl.h,
+      generic/tclcurl.c: Added support for the proxy type: socks5_hostname and the new
+      protocols for '-protocols' and '-protocolsredir'
+
+2011-09-27 Andres Garcia <fandom@telefonica.net>
+
+    * generic/tclcurl.h,
+      generic/tclcurl.c: Added support for CURLOPT_GSSAPI_DELEGATION.
+
+    * configure.in,
+      generic/tclcurl.h,
+      generic/tclcurl.c,
+      generic/tclcurl.tcl: Tclcurl now reports to be version 7.22.0
+
+2011-09-26 Andres Garcia <fandom@telefonica.net>
+
+    * generic/tclcurl.h,
+      generic/tclcurl.c: Added support for CURLOPT_RESOLVE, CURLOPT_TLSAUTH_USERNAME, 
+      CURLOPT_TLSAUTH_PASSWORD, CURLOPT_TLSAUTH_TYPE and CURLOPT_TRANSFER_ENCODING
+
+2011-09-25 Andres Garcia <fandom@telefonica.net>
+
+    * generic/tclcurl.h,
+      generic/tclcurl.c,
+      tests/ftpWildcard.tcl: Added support for CURLOPT_WILDCARDMATCH, CURLOPT_CHUNK_BGN_FUNCTION, 
+      CURLOPT_CHUNK_END_FUNCTION and CURLOPT_FNMATCH_FUNCTION.
+
+2011-09-24 Andres Garcia <fandom@telefonica.net>
+
+    * pkgIndex.tcl.in: Fixed the reason why 'curl::transfer' didn't work.
+
+2011-09-09 Andres Garcia <fandom@telefonica.net>
+
+    * generic/tclcurl.h,
+      generic/tclcurl.c,
+      tests/pop3.tcl
+      tests/smtp.tcl: Added support for CURLOPT_MAIL_FROM, CURLOPT_MAIL_RCPT and CURLOPT_FTP_USE_PRET
+
+2011-09-08 Andres Garcia <fandom@telefonica.net>
+
+    * configure.in,
+      generic/tclcurl.h,
+      generic/tclcurl.c,
+      generic/tclcurl.tcl: Tclcurl now reports to be version 7.21.7
+
+2011-09-05 Andres Garcia <fandom@telefonica.net>
+  
+    * generic/tclcurl.c: changed a 'ulong' to 'usigned long int'.
+
+	* generic/tclcurl.h: removed include to 'curl/types.h'.
+
+2009-09-30 Andres Garcia <fandom@telefonica.net>
+
+    * Release version 7.19.6
+
+2009-09-27 Andres Garcia <fandom@telefonica.net>
+
+    * generic/tclcurl.h,
+      generic/tclcurl.c: Added support for http1.0 proxies.
+
+    * generic/tclcurl.h,
+      generic/tclcurl.c: Added support for CURLOPT_NOPROXY.
+
+2009-09-25 Andres Garcia <fandom@telefonica.net>
   
     * generic/tclcurl.h,
       generic/tclcurl.c: Fixed CURLOPT_FTP_SSL_CC and following options

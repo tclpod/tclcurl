@@ -7,6 +7,9 @@ $curlHandle perform
 
 puts "Url: [$curlHandle getinfo effectiveurl]"
 puts "Primary IP: [$curlHandle getinfo primaryip]"
+puts "Primary port: [$curlHandle getinfo primaryport]"
+puts "Local IP: [$curlHandle getinfo localip]"
+puts "Local port: [$curlHandle getinfo localport]"
 puts "Redirect url: [$curlHandle getinfo redirecturl]"
 puts "Http-code: [$curlHandle getinfo responsecode]"
 puts "Proxy response code: [$curlHandle getinfo httpconnectcode]"
