@@ -4,6 +4,7 @@
 #export DH_VERBOSE=1
 
 export DEB_LDFLAGS_MAINT_PREPEND := -Wl,-z,defs -Wl,--as-needed
+DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 
 %:
 	dh $@ --with quilt
@@ -21,12 +22,13 @@ override_dh_auto_install:
 	dh_auto_install --destdir=$(CURDIR)/debian/tclcurl
 
 	mkdir $(CURDIR)/debian/tclcurl/usr/lib/tcltk
-	mv $(CURDIR)/debian/tclcurl/usr/lib/TclCurl* \
+	mv $(CURDIR)/debian/tclcurl/usr/lib/$(DEB_HOST_MULTIARCH)/TclCurl* \
 		$(CURDIR)/debian/tclcurl/usr/lib/tcltk
 	rm -rf \
 		$(CURDIR)/debian/tclcurl/usr/share/man/mann \
 		$(CURDIR)/debian/tclcurl/usr/bin \
-		$(CURDIR)/debian/tclcurl/usr/include
+		$(CURDIR)/debian/tclcurl/usr/include \
+		$(CURDIR)/debian/tclcurl/usr/lib/$(DEB_HOST_MULTIARCH)
 
 	chmod 644 \
 		$(CURDIR)/tests/*.tcl \

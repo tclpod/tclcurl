@@ -12,6 +12,9 @@ tclcurl (7.22.0-1) UNRELEASED; urgency=low
   * Change Standards-Version to 3.9.3 - no changes required.
   * Update copyright year and download location in debian/copyright.
   * Update homepage in debian/watch and debian/control.
+  * Continue to move the libs to /usr/lib/tcltk/ for now against
+    the will of the buildsystem. Original installation path is
+    now architecture dependend.
 
  -- Sven Hoexter <hoexter@debian.org>  Sat, 02 Jun 2012 19:02:30 +0200
 
