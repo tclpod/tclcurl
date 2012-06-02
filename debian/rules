@@ -8,9 +8,6 @@ LDFLAGS += -Wl,-z,defs -Wl,--as-needed
 %:
 	dh $@ --with quilt
 
-override_dh_clean:
-	dh_clean -Xautom4te.cache -Xtests/a.tcl~
-
 override_dh_auto_configure:
 	dh_auto_configure -- \
 		--prefix=/usr \
@@ -37,9 +34,6 @@ override_dh_auto_install:
 		$(CURDIR)/tests/multi/single.tcl
 
 override_dh_auto_test:
-
-override_dh_installexamples:
-	dh_installexamples -Xa.tcl~
 
 override_dh_makeshlibs:
 	dh_makeshlibs
