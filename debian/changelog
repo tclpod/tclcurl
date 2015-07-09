@@ -2,6 +2,7 @@ tclcurl (7.22.0-2) unstable; urgency=low
 
   * Point the Homepage field to a mirror of the last website to cater
     http://duck.debian.net/ and the DUCK challenge.
+  * Bump Standards-Version to 3.9.6 - so far no changes required.
 
  -- Sven Hoexter <hoexter@debian.org>  Thu, 09 Jul 2015 22:56:27 +0200
 
