@@ -1,6 +1,8 @@
 Fix a few spelling issue flagged by lintian.
---- a/doc/tclcurl.n
-+++ b/doc/tclcurl.n
+Index: tclcurl/doc/tclcurl.n
+===================================================================
+--- tclcurl.orig/doc/tclcurl.n
++++ tclcurl/doc/tclcurl.n
 @@ -52,7 +52,7 @@ curl and this call MUST have a correspon
  .I cleanup
  when the operation is completed.
@@ -10,6 +12,64 @@ Fix a few spelling issue flagged by lintian.
  possible.
  .sp
  .B RETURN VALUE
+@@ -192,7 +192,7 @@ empty or it may be thousands of bytes.
+ 
+ .TP
+ .B -file
+-File in which the transfered data will be saved.
++File in which the transferred data will be saved.
+ 
+ .TP
+ .B -readproc
+@@ -213,13 +213,13 @@ server end and the transfer will end the
+ 
+ .TP
+ .B -infile
+-File from which the data will be transfered.
++File from which the data will be transferred.
+ 
+ .TP
+ .B -progressproc
+ Name of the Tcl procedure that will invoked by TclCurl  with a frequent
+ interval during operation (roughly once per second or sooner), no matter if data
+-is being transfered or not.  Unknown/unused
++is being transferred or not.  Unknown/unused
+ argument values passed to the callback will be set to zero (like if you
+ only download data, the upload size will remain 0), the prototype of the
+ procedure must be:
+@@ -260,20 +260,20 @@ where \fBinfoType\fP specifies what kind
+ 
+ .TP
+ .B -chunkbgnproc
+-Name of the procedure that will be called before a file will be transfered by
++Name of the procedure that will be called before a file will be transferred by
+ ftp, it should match the following prototype:
+ .sp
+ .B ChunkBgnProc {remains}
+ .sp
+ 
+-Where remains is the number of files left to be transfered (or skipped)
++Where remains is the number of files left to be transferred (or skipped)
+ 
+ This callback makes sense only when using the \fB-wildcard\fP option.
+ 
+ .TP
+ .B -chunkbgnvar
+ Name of the variable in the global scope that will contain the data of the file about
+-to be transfered. If you don't use this option '::fileData' will be used.
++to be transferred. If you don't use this option '::fileData' will be used.
+ 
+ The available data is: filename, filetype (file, directory, symlink, device block, device char,
+ named pipe, socket, door or error if it couldn't be identified), time, perm, uid, gid, 
+@@ -281,7 +281,7 @@ size, hardlinks and flags.
+ 
+ .TP
+ .B -chunkendproc
+-Name of the procedure that will be called after a file is transfered (or skipped) 
++Name of the procedure that will be called after a file is transferred (or skipped) 
+ by ftp, it should match the following prototype:
+ .sp
+ .B ChunkEndProc {}
 @@ -479,7 +479,7 @@ to using the share interface instead! Se
  
  .TP
@@ -46,6 +106,24 @@ Fix a few spelling issue flagged by lintian.
  persistent conecctions. The set amount will be the maximum amount of simultaneous
  connections that TclCurl may cache in this easy handle. Default is 5, and there
  isn't much point in changing this value unless you are perfectly aware of how this
+@@ -2020,7 +2020,7 @@ FTP can't get host. Couldn't resolve the
+ FTP couldn't set type. Couldn't change transfer method to either binary or
+ ascii.
+ .IP 18
+-Partial file. Only a part of the file was transfered, this happens when
++Partial file. Only a part of the file was transferred, this happens when
+ the server first reports an expected transfer size and then delivers data
+ that doesn't match the given size.
+ .IP 19
+@@ -2221,7 +2221,7 @@ negotiations that are specific to the pa
+ .TP
+ .B starttransfertime
+ Returns the time, in seconds, it took from the start until the first byte
+-is just about to be transfered. This includes the \fBpretransfertime\fP,
++is just about to be transferred. This includes the \fBpretransfertime\fP,
+ and also the time the server needs to calculate the result.
+ 
+ .TP
 @@ -2413,7 +2413,7 @@ to pause the transfer.
  Resumes a transfer paused with \fBcurlhandle pause\fP
  
@@ -55,3 +133,16 @@ Fix a few spelling issue flagged by lintian.
  command, it takes the same arguments as the \fIcurlHandle\fP \fBconfigure\fP
  and will init, configure, perform and cleanup a connection for you.
  
+Index: tclcurl/doc/tclcurl_multi.n
+===================================================================
+--- tclcurl.orig/doc/tclcurl_multi.n
++++ tclcurl/doc/tclcurl_multi.n
+@@ -223,7 +223,7 @@ the multi handle.
+ 
+ The \fBcommand\fP option allows you to specify a command to invoke after all the easy
+ handles have finished their transfers, even though I say it is an option, the truth is
+-you must use this command to cleanup all the handles, otherwise the transfered files
++you must use this command to cleanup all the handles, otherwise the transferred files
+ may not be complete.
+ 
+ This support is still in a very experimental state, it may still change without warning.
