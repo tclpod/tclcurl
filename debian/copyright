@@ -5,8 +5,11 @@ It is currently maintained by Sven Hoexter <sven@timegate.de>.
 
 It was downloaded from
  http://personal.telefonica.terra.es/web/getleft/tclcurl/download.html
+Some patches were integrated in this repository:
+ https://bitbucket.org/smh377/tclcurl
 
-Upstream Author: Andres Garcia <fandom@telefonica.net>
+Current upstream author: Steve Havelka <smh377@yahoo.com>
+Original upstream author: Andres Garcia <fandom@telefonica.net>
 
 Copyright:
 

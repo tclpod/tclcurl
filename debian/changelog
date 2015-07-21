@@ -1,8 +1,9 @@
 tclcurl (7.22.0-3) unstable; urgency=low
 
   * Remove d/watch. The old download location is no longer available.
+  * Update d/copyright and add the link to Steve Havelkas bitbuck repository.
 
- --
+ -- Sven Hoexter <hoexter@debian.org>  Tue, 21 Jul 2015 21:02:35 +0200
 
 tclcurl (7.22.0-2) unstable; urgency=low
 
