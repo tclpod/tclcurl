@@ -1,4 +1,4 @@
-tclcurl (7.22.0+hg20151017-1) UNRELEASED; urgency=low
+tclcurl (7.22.0+hg20151017-1) unstable; urgency=low
 
   * Import a mercurial snapshot based on b5bc0662447d.
     + Removed all patches, all applied upstream. Thanks Steve.
@@ -6,10 +6,10 @@ tclcurl (7.22.0+hg20151017-1) UNRELEASED; urgency=low
   * Update d/copyright and add the link to Steve Havelkas bitbuck repository.
   * Add d/patches/bts801734.patch - thanks to Christian Werner!
     (Closes: #801734)
-  * Add d/pattches/bts719441.patch - thanks to Christian Werner!
+  * Add d/patches/bts719441.patch - thanks to Christian Werner!
     (Closes: #719441.patch)
 
- -- Sven Hoexter <hoexter@debian.org>  Sat, 17 Oct 2015 22:16:02 +0200
+ -- Sven Hoexter <hoexter@debian.org>  Sat, 17 Oct 2015 23:26:15 +0200
 
 tclcurl (7.22.0-2) unstable; urgency=low
 
