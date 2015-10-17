@@ -1,6 +1,7 @@
 tclcurl (7.22.0+hg20151017-1) UNRELEASED; urgency=low
 
   * Import a mercurial snapshot based on b5bc0662447d.
+    + Removed all patches, all applied upstream. Thanks Steve.
   * Remove d/watch. The old download location is no longer available.
   * Update d/copyright and add the link to Steve Havelkas bitbuck repository.
 
