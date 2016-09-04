@@ -1,3 +1,10 @@
+tclcurl (7.22.0+hg20160822-1) UNRELEASED; urgency=low
+
+  * Import a mercurial snapshot based on 475f63137a7e.
+   + Removed alle patches, all appliead upstream, thanks again Steve.
+
+ --
+
 tclcurl (7.22.0+hg20151017-1) unstable; urgency=low
 
   * Import a mercurial snapshot based on b5bc0662447d.
