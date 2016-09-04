@@ -7,7 +7,7 @@ export DEB_LDFLAGS_MAINT_PREPEND := -Wl,-z,defs -Wl,--as-needed
 DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 
 %:
-	dh $@ --with quilt
+	dh $@
 
 override_dh_auto_configure:
 	dh_auto_configure -- \
