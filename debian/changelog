@@ -3,7 +3,7 @@ tclcurl (7.22.0+hg20160822-1) UNRELEASED; urgency=low
   * Import a mercurial snapshot based on 475f63137a7e.
    + Removed alle patches, all appliead upstream, thanks again Steve.
 
- --
+ -- Sven Hoexter <hoexter@debian.org>  Sun, 04 Sep 2016 16:52:08 +0200
 
 tclcurl (7.22.0+hg20151017-1) unstable; urgency=low
 
