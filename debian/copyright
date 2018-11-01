@@ -3,9 +3,10 @@ Wed, 26 Sep 2001 00:51:25 +0200.
 
 It is currently maintained by Sven Hoexter <sven@timegate.de>.
 
-It was downloaded from
+It was originally downloaded from
  http://personal.telefonica.terra.es/web/getleft/tclcurl/download.html
-Some patches were integrated in this repository:
+The current snapshot release is based on the now offline repository
+formerly located at:
  https://bitbucket.org/smh377/tclcurl
 
 Current upstream author: Steve Havelka <smh377@yahoo.com>

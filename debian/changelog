@@ -6,6 +6,8 @@ tclcurl (7.22.0+hg20160822-2) unstable; urgency=medium
   * Change package priority from extra to optional.
   * Change debhelper compat level to 11 and move the
     declaration to Build-Depends.
+  * Update d/copyright to note that the repository this
+    package was based on is now offline.
 
  --
 
