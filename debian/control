@@ -1,6 +1,6 @@
 Source: tclcurl
 Section: interpreters
-Priority: extra
+Priority: optional
 Maintainer: Sven Hoexter <hoexter@debian.org>
 Build-Depends: debhelper-compat (= 11), tcl-dev, libcurl4-gnutls-dev (>= 7.22.0), bc
 Standards-Version: 4.2.1
