@@ -9,7 +9,7 @@ tclcurl (7.22.0+hg20160822-2) unstable; urgency=medium
   * Update d/copyright to note that the repository this
     package was based on is now offline.
 
- --
+ -- Sven Hoexter <hoexter@debian.org>  Thu, 01 Nov 2018 09:54:01 +0100
 
 tclcurl (7.22.0+hg20160822-1) unstable; urgency=low
 
