@@ -2,6 +2,7 @@ tclcurl (7.22.0+hg20160822-2) unstable; urgency=medium
 
   * Remove Hompage from d/control - does no longer exist.
   * Adjust Vcs-* to point to https endpoints.
+  * Bump Standards-Version to 4.2.1 - no changes required.
 
  --
 
