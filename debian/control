@@ -4,8 +4,8 @@ Priority: extra
 Maintainer: Sven Hoexter <hoexter@debian.org>
 Build-Depends: debhelper (>= 9), tcl-dev, libcurl4-gnutls-dev (>= 7.22.0), bc
 Standards-Version: 3.9.8
-Vcs-Git: git://git.sven.stormbind.net/git/sven/tclcurl.git
-Vcs-Browser: http://git.sven.stormbind.net/?p=sven/tclcurl.git
+Vcs-Git: https://git.sven.stormbind.net/tclcurl.git
+Vcs-Browser: https://git.sven.stormbind.net/?p=sven/tclcurl.git
 
 Package: tclcurl
 Architecture: any
